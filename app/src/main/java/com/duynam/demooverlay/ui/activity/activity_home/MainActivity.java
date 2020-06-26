@@ -1,11 +1,5 @@
 package com.duynam.demooverlay.ui.activity.activity_home;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-import androidx.databinding.DataBindingUtil;
-import androidx.recyclerview.widget.GridLayoutManager;
-
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -13,6 +7,12 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.databinding.DataBindingUtil;
+import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.duynam.demooverlay.R;
 import com.duynam.demooverlay.databinding.ActivityMainBinding;
@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements GetImageFromDevic
         }
     }
 
-    private void openStorage(){
+    private void openStorage() {
         mainBinding.gallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

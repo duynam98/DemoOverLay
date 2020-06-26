@@ -13,9 +13,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.RelativeLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -29,11 +29,14 @@ import com.duynam.demooverlay.databinding.ActivityEditImageBinding;
 import com.duynam.demooverlay.ui.activity.activity_image_edit.ListImageEditActivity;
 import com.duynam.demooverlay.ui.custorm.BubbleTextView;
 import com.duynam.demooverlay.ui.custorm.StickerView;
-import com.duynam.demooverlay.ui.fragment.RotateImageFragment;
 import com.duynam.demooverlay.ui.fragment.fragment_add_text.AddTextMenuFragment;
 import com.duynam.demooverlay.ui.fragment.fragment_menu_sticker.MenuStickerFragment;
 import com.duynam.demooverlay.ui.fragment.fragment_opacity.OpacityFragment;
+import com.duynam.demooverlay.ui.fragment.fragment_rotate.RotateImageFragment;
 import com.duynam.demooverlay.utils.Constant;
+import com.filter.advanced.JSToneCurved;
+import com.filter.base.GPUImageFilter;
+import com.filter.helper.FilterManager;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -73,6 +76,9 @@ public class EditImageActivity extends AppCompatActivity implements MenuAdapter.
         initRecycleViewMenu();
         doneAddText();
         menuTop();
+        FilterManager.init(this);
+        GPUImageFilter gpuImageFilter = FilterManager.getInstance().getFilter(FilterManager.getInstance().types[1]);
+
     }
 
     private void initRecycleViewMenu() {
@@ -89,6 +95,7 @@ public class EditImageActivity extends AppCompatActivity implements MenuAdapter.
             Bitmap bitmap = null;
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.parse(path));
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -109,7 +116,7 @@ public class EditImageActivity extends AppCompatActivity implements MenuAdapter.
         Drawable d = imageBinding.imgContainer.getDrawable();
         RectF imageRectF = new RectF(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
         RectF viewRectF = new RectF(0, 0, w, h);
-        matrix.setRectToRect(imageRectF, viewRectF, Matrix.ScaleToFit.CENTER);
+        matrix.setRectToRect(imageRectF, viewRectF, Matrix.ScaleToFit.FILL);
         imageBinding.imgContainer.setImageMatrix(matrix);
     }
 
@@ -238,7 +245,7 @@ public class EditImageActivity extends AppCompatActivity implements MenuAdapter.
 
             }
         });
-        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+        ConstraintLayout.LayoutParams lp = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.MATCH_PARENT);
         imageBinding.rootView.addView(bubbleTextView, lp);
         mViews.add(bubbleTextView);
         setCurrentEdit(bubbleTextView);
@@ -316,7 +323,7 @@ public class EditImageActivity extends AppCompatActivity implements MenuAdapter.
     }
 
     public void saveImage() {
-        Bitmap bitmap = Bitmap.createBitmap(imageBinding.rootView.getWidth(), imageBinding.rootView.getHeight(), Bitmap.Config.ARGB_8888);
+        Bitmap bitmap = Bitmap.createBitmap(imageBinding.imgContainer.getWidth(), imageBinding.imgContainer.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         imageBinding.rootView.draw(canvas);
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();

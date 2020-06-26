@@ -1,13 +1,12 @@
-package com.duynam.demooverlay.ui.fragment;
+package com.duynam.demooverlay.ui.fragment.fragment_rotate;
 
 import android.os.Bundle;
-
-import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
 
 import com.duynam.demooverlay.R;
 import com.duynam.demooverlay.databinding.FragmentRotateImageBinding;
@@ -25,7 +24,7 @@ public class RotateImageFragment extends Fragment {
         return rotateImageBinding.getRoot();
     }
 
-    private void rotate(){
+    private void rotate() {
         rotateImageBinding.progressRotate.setScrollingListener(new HorizontalProgressWheelView.ScrollingListener() {
             @Override
             public void onScrollStart() {
@@ -34,7 +33,7 @@ public class RotateImageFragment extends Fragment {
 
             @Override
             public void onScroll(float delta, float totalDistance) {
-                if (getActivity() != null && getActivity() instanceof EditImageActivity){
+                if (getActivity() != null && getActivity() instanceof EditImageActivity) {
                     EditImageActivity activity = ((EditImageActivity) getActivity());
                     activity.matrix.postRotate(delta / 42, activity.w / 2f, activity.h / 2f);
                     activity.imageBinding.imgContainer.setImageMatrix(activity.matrix);
