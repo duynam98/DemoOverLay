@@ -1,9 +1,11 @@
 package com.duynam.demooverlay.ui.fragment.fragment_rotate;
 
+import android.graphics.Matrix;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
@@ -35,8 +37,10 @@ public class RotateImageFragment extends Fragment {
             public void onScroll(float delta, float totalDistance) {
                 if (getActivity() != null && getActivity() instanceof EditImageActivity) {
                     EditImageActivity activity = ((EditImageActivity) getActivity());
-                    activity.matrix.postRotate(delta / 42, activity.w / 2f, activity.h / 2f);
-                    activity.imageBinding.imgContainer.setImageMatrix(activity.matrix);
+                    activity.matrix.postRotate(delta / 42, activity.w / 2f,
+                            activity.h / 2f);
+                    //activity.matrix.postScale(100, 100);
+                    //activity.imageBinding.imgContainer.setImageMatrix(activity.matrix);
                 }
             }
 

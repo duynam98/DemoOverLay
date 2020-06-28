@@ -1,23 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/app_name_text"
-        tools:context=".ui.activity.activity_edit_image.EditImageActivity">
+        tools:context=".ui.activity.activity_edit_image.EditImageActivity"
+        android:background="@color/app_name_text">
 
         <View
             android:id="@+id/toolbarView"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/app_name_text"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/img_cancel"
@@ -45,23 +42,35 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/rootView"
-            android:layout_width="match_parent"
+            android:layout_width="@dimen/size_0"
             android:layout_height="@dimen/size_0"
-            android:layout_margin="@dimen/size_16"
             app:layout_constraintBottom_toTopOf="@id/frame_menu"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/toolbarView">
+            app:layout_constraintTop_toBottomOf="@id/toolbarView"
+            app:layout_constraintHeight_percent="0.75"
+            app:layout_constraintWidth_percent="0.9">
 
             <ImageView
+                android:visibility="gone"
                 android:id="@+id/img_container"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/size_0"
-                android:scaleType="matrix"
+                android:layout_height="match_parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"></ImageView>
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.filter.base.GPUImageView
+                android:id="@+id/imgFilter"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHeight_percent="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_percent="0.5" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

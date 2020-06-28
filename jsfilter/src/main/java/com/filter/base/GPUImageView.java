@@ -183,6 +183,7 @@ public class GPUImageView extends FrameLayout {
      */
     public void setScaleType(GPUImage.ScaleType scaleType) {
         gpuImage.setScaleType(scaleType);
+        requestRender();
     }
 
     /**

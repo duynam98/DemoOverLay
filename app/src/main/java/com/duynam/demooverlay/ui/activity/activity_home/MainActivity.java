@@ -20,6 +20,7 @@ import com.duynam.demooverlay.ui.activity.activity_edit_image.EditImageActivity;
 import com.duynam.demooverlay.utils.Constant;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
+import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
 import java.util.List;
@@ -91,7 +92,9 @@ public class MainActivity extends AppCompatActivity implements GetImageFromDevic
 
     @Override
     public void onClickImage(String patch) {
-        CropImage.activity(Uri.fromFile(new File(patch)))
+//        CropImage.activity(Uri.fromFile(new File(patch)))
+//                .start(this);
+        UCrop.of(Uri.fromFile(new File(patch)), Uri.fromFile(new File(patch)))
                 .start(this);
     }
 
@@ -104,14 +107,11 @@ public class MainActivity extends AppCompatActivity implements GetImageFromDevic
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-            CropImage.ActivityResult result = CropImage.getActivityResult(data);
-            if (resultCode == RESULT_OK) {
-                Uri resultUri = result.getUri();
-                Intent intent = new Intent(MainActivity.this, EditImageActivity.class);
-                intent.putExtra(Constant.PATCH_IMAGE, resultUri.toString());
-                startActivity(intent);
-            }
+        if (resultCode == RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
+            Uri resultUri = UCrop.getOutput(data);
+            Intent intent = new Intent(MainActivity.this, EditImageActivity.class);
+            intent.putExtra(Constant.PATCH_IMAGE, resultUri.toString());
+            startActivity(intent);
         }
     }
 

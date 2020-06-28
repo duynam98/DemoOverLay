@@ -62,7 +62,7 @@ public class AddTextMenuFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if (getActivity() != null && getActivity() instanceof EditImageActivity){
-                    ((EditImageActivity) getActivity()).addTexttoImage();
+                    ((EditImageActivity) getActivity()).addTextImage();
                 }
             }
         });

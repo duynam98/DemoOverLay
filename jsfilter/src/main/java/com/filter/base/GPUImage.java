@@ -34,13 +34,13 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.List;
 
-public class GPUImage {
+public class GPUImage{
     private final Context mContext;
     private final GPUImageRenderer mRenderer;
     private GLSurfaceView mGlSurfaceView;
     private GPUImageFilter mFilter;
     private Bitmap mCurrentBitmap;
-    private GPUImage.ScaleType mScaleType = GPUImage.ScaleType.CENTER_CROP;
+    private GPUImage.ScaleType mScaleType;
     static final int SURFACE_TYPE_SURFACE_VIEW = 0;
     static final int SURFACE_TYPE_TEXTURE_VIEW = 1;
 
@@ -104,6 +104,9 @@ public class GPUImage {
         }
         Rotation rotation = Rotation.NORMAL;
         switch (degrees) {
+            case 30:
+                rotation = Rotation.ROTATION_30;
+                break;
             case 90:
                 rotation = Rotation.ROTATION_90;
                 break;
@@ -128,7 +131,6 @@ public class GPUImage {
         mRenderer.setFilter(mFilter);
         requestRender();
     }
-
 
     public void setImage(final Bitmap bitmap) {
         mCurrentBitmap = bitmap;
@@ -510,7 +512,7 @@ public class GPUImage {
                 System.gc();
             }
 
-            if (mScaleType == GPUImage.ScaleType.CENTER_CROP) {
+            if (mScaleType == ScaleType.CENTER_INSIDE) {
                 // Crop it
                 int diffWidth = newSize[0] - mOutputWidth;
                 int diffHeight = newSize[1] - mOutputHeight;
@@ -533,7 +535,7 @@ public class GPUImage {
             float withRatio = (float) width / mOutputWidth;
             float heightRatio = (float) height / mOutputHeight;
 
-            boolean adjustWidth = mScaleType == GPUImage.ScaleType.CENTER_CROP
+            boolean adjustWidth = mScaleType == ScaleType.CENTER_INSIDE
                     ? withRatio > heightRatio : withRatio < heightRatio;
 
             if (adjustWidth) {
@@ -547,7 +549,7 @@ public class GPUImage {
         }
 
         private boolean checkSize(boolean widthBigger, boolean heightBigger) {
-            if (mScaleType == GPUImage.ScaleType.CENTER_CROP) {
+            if (mScaleType == ScaleType.CENTER_INSIDE) {
                 return widthBigger && heightBigger;
             } else {
                 return widthBigger || heightBigger;
@@ -581,6 +583,6 @@ public class GPUImage {
         void response(T item);
     }
 
-    public enum ScaleType { CENTER_INSIDE, CENTER_CROP }
+    public enum ScaleType { CENTER_INSIDE, CENTER_CROP, CENTER}
 }
 

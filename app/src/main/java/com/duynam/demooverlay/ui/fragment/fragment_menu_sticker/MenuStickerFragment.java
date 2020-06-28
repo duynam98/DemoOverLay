@@ -40,7 +40,7 @@ public class MenuStickerFragment extends Fragment implements MenuStickerAdapter.
     @Override
     public void chooseStickerFinish(String name) {
         if (getActivity() != null && getActivity() instanceof EditImageActivity){
-            ((EditImageActivity) getActivity()).addStickertoImage(Constant.PATCH_STICKER + "/" + name);
+            ((EditImageActivity) getActivity()).addStickerImage(Constant.PATCH_STICKER + "/" + name);
         }
     }
 

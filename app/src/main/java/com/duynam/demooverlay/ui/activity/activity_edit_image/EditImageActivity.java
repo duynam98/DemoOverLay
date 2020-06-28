@@ -14,9 +14,17 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.databinding.DataBindingUtil;
@@ -24,17 +32,22 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.duynam.demooverlay.R;
 import com.duynam.demooverlay.databinding.ActivityEditImageBinding;
 import com.duynam.demooverlay.ui.activity.activity_image_edit.ListImageEditActivity;
 import com.duynam.demooverlay.ui.custorm.BubbleTextView;
 import com.duynam.demooverlay.ui.custorm.StickerView;
 import com.duynam.demooverlay.ui.fragment.fragment_add_text.AddTextMenuFragment;
+import com.duynam.demooverlay.ui.fragment.fragment_filter.FilterFragment;
 import com.duynam.demooverlay.ui.fragment.fragment_menu_sticker.MenuStickerFragment;
 import com.duynam.demooverlay.ui.fragment.fragment_opacity.OpacityFragment;
 import com.duynam.demooverlay.ui.fragment.fragment_rotate.RotateImageFragment;
 import com.duynam.demooverlay.utils.Constant;
 import com.filter.advanced.JSToneCurved;
+import com.filter.base.GPUImage;
 import com.filter.base.GPUImageFilter;
 import com.filter.helper.FilterManager;
 
@@ -50,7 +63,7 @@ import java.util.UUID;
 public class EditImageActivity extends AppCompatActivity implements MenuAdapter.OnClick {
 
     public ActivityEditImageBinding imageBinding;
-    public Matrix matrix;
+    public Matrix matrix = new Matrix();
     public int w, h;
     private FragmentTransaction fragmentTransaction;
     private LinearLayoutManager linearLayoutManager;
@@ -65,6 +78,8 @@ public class EditImageActivity extends AppCompatActivity implements MenuAdapter.
     public BubbleTextView mCurrentEditTextView;
     public BubbleTextView bubbleTextView;
 
+    public Bitmap bitmap;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,8 +92,8 @@ public class EditImageActivity extends AppCompatActivity implements MenuAdapter.
         doneAddText();
         menuTop();
         FilterManager.init(this);
-        GPUImageFilter gpuImageFilter = FilterManager.getInstance().getFilter(FilterManager.getInstance().types[1]);
-
+        int q = imageBinding.rootView.getWidth();
+        int q1 = imageBinding.rootView.getHeight();
     }
 
     private void initRecycleViewMenu() {
@@ -92,33 +107,51 @@ public class EditImageActivity extends AppCompatActivity implements MenuAdapter.
     private void initImage() {
         if (getIntent() != null) {
             String path = getIntent().getStringExtra(Constant.PATCH_IMAGE);
-            Bitmap bitmap = null;
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.parse(path));
+                Glide.with(this).asBitmap().load(bitmap).into(new CustomTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                        //imageBinding.imgFilter.setImage(resource);
+                        imageBinding.imgFilter.setImage(resource);
+                        //setSizeRllSave(bitmap.getWidth(), bitmap.getHeight());
+                    }
 
+                    @Override
+                    public void onLoadCleared(@Nullable Drawable placeholder) {
+
+                    }
+                });
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            imageBinding.imgContainer.setImageBitmap(bitmap);
         }
+    }
+
+    public void setSizeRllSave(int w, int h) {
+        ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(w, 0);
+        params.topToBottom = R.id.toolbarView;
+        params.bottomToTop = R.id.frame_menu;
+        params.leftToLeft = R.id.parent;
+        params.rightToRight = R.id.parent;
+        imageBinding.rootView.setLayoutParams(params);
     }
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        w = imageBinding.imgContainer.getWidth();
         h = imageBinding.imgContainer.getHeight();
-        setImageCenterAfterCrop(w, h);
+        w = imageBinding.imgContainer.getWidth();
     }
 
-    public void setImageCenterAfterCrop(int w, int h) {
-        matrix = new Matrix();
-        Drawable d = imageBinding.imgContainer.getDrawable();
-        RectF imageRectF = new RectF(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
-        RectF viewRectF = new RectF(0, 0, w, h);
-        matrix.setRectToRect(imageRectF, viewRectF, Matrix.ScaleToFit.FILL);
-        imageBinding.imgContainer.setImageMatrix(matrix);
-    }
+//    public void setImageCenterAfterCrop(int w, int h) {
+//        matrix = new Matrix();
+//        Drawable d = imageBinding.imgContainer.getDrawable();
+//        RectF imageRectF = new RectF(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
+//        RectF viewRectF = new RectF(0, 0, w, h);
+//        matrix.setRectToRect(imageRectF, viewRectF, Matrix.ScaleToFit.CENTER);
+//        imageBinding.imgContainer.setImageMatrix(matrix);
+//    }
 
     public void rotateImage() {
         imageBinding.imgRotateDegree.setOnClickListener(new View.OnClickListener() {
@@ -150,10 +183,15 @@ public class EditImageActivity extends AppCompatActivity implements MenuAdapter.
                 fragmentTransaction.replace(R.id.frame_menu, menuStickerFragment).addToBackStack(null);
                 fragmentTransaction.commit();
                 break;
+            case 2:
+                fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.frame_menu, new FilterFragment(bitmap)).addToBackStack(null);
+                fragmentTransaction.commit();
+                break;
         }
     }
 
-    public void addStickertoImage(String patch) {
+    public void addStickerImage(String patch) {
         stickerView = new StickerView(this);
         Bitmap bitmap = getBitmapFromAsset(patch);
         stickerView.setBitmap(bitmap);
@@ -201,7 +239,7 @@ public class EditImageActivity extends AppCompatActivity implements MenuAdapter.
         setCurrentTView(stickerView);
     }
 
-    public void addTexttoImage() {
+    public void addTextImage() {
         bubbleTextView = new BubbleTextView(this,
                 Color.WHITE, 0);
         bubbleTextView.setImageResource(R.mipmap.none);
@@ -307,7 +345,6 @@ public class EditImageActivity extends AppCompatActivity implements MenuAdapter.
         });
     }
 
-    //
     private void doneAddText() {
         imageBinding.imgDoneAddText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -323,11 +360,11 @@ public class EditImageActivity extends AppCompatActivity implements MenuAdapter.
     }
 
     public void saveImage() {
-        Bitmap bitmap = Bitmap.createBitmap(imageBinding.imgContainer.getWidth(), imageBinding.imgContainer.getHeight(), Bitmap.Config.ARGB_8888);
+        Bitmap bitmap = Bitmap.createBitmap(imageBinding.rootView.getWidth(), imageBinding.rootView.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         imageBinding.rootView.draw(canvas);
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, bytes);
         File folder = new File(Environment.getExternalStorageDirectory().toString() + File.separator + "edit_image1");
         if (!folder.exists()) {
             folder.mkdirs();
