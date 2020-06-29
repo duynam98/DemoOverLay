@@ -4,8 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
@@ -21,7 +19,6 @@ public class AddTextMenuFragment extends Fragment {
 
     private FragmentAddTextMenuBinding binding;
     private FragmentTransaction fragmentTransaction;
-    private Animation animation;
 
     public static AddTextMenuFragment newInstance(String param1, String param2) {
         AddTextMenuFragment fragment = new AddTextMenuFragment();
@@ -38,15 +35,17 @@ public class AddTextMenuFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_add_text_menu, container, false);
-        animation = AnimationUtils.loadAnimation(getContext(), R.anim.slide_left_toright);
         addText();
         editTextTransparency();
         editTextSize();
         setColor();
+        binding.ctlColor.setEnabled(false);
+        binding.ctlTransparency.setEnabled(false);
+        binding.ctlSize.setEnabled(false);
         return binding.getRoot();
     }
 
-    private void editTextTransparency(){
+    private void editTextTransparency() {
         binding.ctlTransparency.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -57,22 +56,25 @@ public class AddTextMenuFragment extends Fragment {
         });
     }
 
-    private void addText(){
+    private void addText() {
         binding.ctlAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (getActivity() != null && getActivity() instanceof EditImageActivity){
+                if (getActivity() != null && getActivity() instanceof EditImageActivity) {
                     ((EditImageActivity) getActivity()).addTextImage();
+                    binding.ctlColor.setEnabled(true);
+                    binding.ctlTransparency.setEnabled(true);
+                    binding.ctlSize.setEnabled(true);
                 }
             }
         });
     }
 
-    private void editTextSize(){
+    private void editTextSize() {
         binding.ctlSize.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (getActivity() != null && getActivity() instanceof EditImageActivity){
+                if (getActivity() != null && getActivity() instanceof EditImageActivity) {
                     fragmentTransaction = getFragmentManager().beginTransaction();
                     fragmentTransaction.replace(R.id.container, OpacityFragment.newInstance(false, false, true)).addToBackStack(null);
                     fragmentTransaction.commit();
@@ -81,7 +83,7 @@ public class AddTextMenuFragment extends Fragment {
         });
     }
 
-    private void setColor(){
+    private void setColor() {
         binding.ctlColor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

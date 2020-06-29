@@ -42,7 +42,6 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
     public void setData() {
         menuHomeList.add(new MenuHome(R.drawable.ic_text, context.getResources().getString(R.string.menu_edit_text)));
         menuHomeList.add(new MenuHome(R.drawable.ic_stickers, context.getResources().getString(R.string.menu_edit_stickers)));
-        menuHomeList.add(new MenuHome(R.drawable.ic_filters, context.getResources().getString(R.string.menu_edit_filter)));
     }
 
     @NonNull

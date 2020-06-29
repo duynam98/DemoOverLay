@@ -19,6 +19,9 @@
     <string name="text_size">Text size</string>
     <string name="double_click_input_text">double_click_input_text</string>
     <string name="crop">Crop</string>
+    <string name="save_image">Save Image</string>
+    <string name="yes">Yes</string>
+    <string name="cancel">Cancel</string>
 
     <!--    list color-->
     <string-array name="color">

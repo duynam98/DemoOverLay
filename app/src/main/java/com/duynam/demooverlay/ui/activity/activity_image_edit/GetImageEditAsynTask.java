@@ -18,7 +18,7 @@ public class GetImageEditAsynTask  extends AsyncTask<Void, Void, ArrayList<Strin
 
     @Override
     protected ArrayList<String> doInBackground(Void... voids) {
-        File file = new File(Environment.getExternalStorageDirectory() + File.separator + "edit_image1");
+        File file = new File(Environment.getExternalStorageDirectory() + File.separator + "input_image");
         if (file.isDirectory()) {
             listFile = file.listFiles();
             for (int i = 0; i < listFile.length; i++) {

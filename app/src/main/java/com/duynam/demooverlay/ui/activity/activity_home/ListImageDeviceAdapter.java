@@ -29,8 +29,14 @@ public class ListImageDeviceAdapter extends RecyclerView.Adapter<ListImageDevice
 
     public void setData(List<String> data) {
         if (data != null) {
-            list_patch_Image.addAll(data);
-            notifyDataSetChanged();
+            if (list_patch_Image.size() > 0){
+                list_patch_Image.clear();
+                list_patch_Image.addAll(data);
+                notifyDataSetChanged();
+            }else {
+                list_patch_Image.addAll(data);
+                notifyDataSetChanged();
+            }
         }
     }
 

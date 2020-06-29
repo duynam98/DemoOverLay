@@ -1,21 +1,15 @@
-package com.duynam.demooverlay.ui.fragment.fragment_filter;
+package com.duynam.demooverlay.ui.activity.activity_filter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.CustomTarget;
-import com.bumptech.glide.request.transition.Transition;
 import com.duynam.demooverlay.R;
-import com.filter.base.GPUImage;
 import com.filter.base.GPUImageFilter;
 import com.filter.base.GPUImageView;
 import com.filter.helper.FilterManager;
@@ -61,17 +55,6 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.FilterHold
 
     @Override
     public void onBindViewHolder(@NonNull final FilterHolder holder, final int position) {
-//        Glide.with(context).asBitmap().load(bitmap).into(new CustomTarget<Bitmap>() {
-//            @Override
-//            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-//
-//            }
-//
-//            @Override
-//            public void onLoadCleared(@Nullable Drawable placeholder) {
-//
-//            }
-//        });
         holder.gpuImageView.setImage(bitmap);
         holder.gpuImageView.setFilter(FilterManager.getInstance().getFilter(filterTypeList.get(position)));
         holder.itemView.setOnClickListener(new View.OnClickListener() {

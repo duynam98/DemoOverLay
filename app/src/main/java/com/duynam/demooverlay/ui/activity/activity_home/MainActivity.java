@@ -1,14 +1,20 @@
 package com.duynam.demooverlay.ui.activity.activity_home;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.DocumentsContract;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
@@ -17,6 +23,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import com.duynam.demooverlay.R;
 import com.duynam.demooverlay.databinding.ActivityMainBinding;
 import com.duynam.demooverlay.ui.activity.activity_edit_image.EditImageActivity;
+import com.duynam.demooverlay.ui.activity.activity_filter.FilterActivity;
 import com.duynam.demooverlay.utils.Constant;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
@@ -83,9 +90,10 @@ public class MainActivity extends AppCompatActivity implements GetImageFromDevic
         mainBinding.gallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CropImage.activity()
-                        .setGuidelines(CropImageView.Guidelines.ON)
-                        .start(MainActivity.this);
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent, "Select Picture"), Constant.PICK_IMAGE);
             }
         });
     }
@@ -104,9 +112,16 @@ public class MainActivity extends AppCompatActivity implements GetImageFromDevic
         adapter.setData(data);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Constant.PICK_IMAGE){
+            if (data != null){
+                Uri patch = data.getData();
+                UCrop.of(Uri.fromFile(new File(getRealPathFromURI_API19(this, patch))), Uri.fromFile(new File(getRealPathFromURI_API19(this, patch)))).start(MainActivity.this);
+            }
+        }
         if (resultCode == RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
             Uri resultUri = UCrop.getOutput(data);
             Intent intent = new Intent(MainActivity.this, EditImageActivity.class);
@@ -115,4 +130,31 @@ public class MainActivity extends AppCompatActivity implements GetImageFromDevic
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    public static String getRealPathFromURI_API19(Context context, Uri uri){
+        String filePath = "";
+        String wholeID = DocumentsContract.getDocumentId(uri);
+        String id = wholeID.split(":")[1];
+        String[] column = { MediaStore.Images.Media.DATA };
+        String sel = MediaStore.Images.Media._ID + "=?";
+        Cursor cursor = context.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                column, sel, new String[]{ id }, null);
+
+        int columnIndex = cursor.getColumnIndex(column[0]);
+        if (cursor.moveToFirst()) {
+            filePath = cursor.getString(columnIndex);
+        }
+        cursor.close();
+        return filePath;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if ((ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
+                && ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            deviceAsynTask = new GetImageFromDeviceAsynTask(this, this);
+            deviceAsynTask.execute();
+        }
+    }
 }

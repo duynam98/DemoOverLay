@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/app_name_text"
-        tools:context=".ui.activity.activity_edit_image.EditImageActivity">
+        tools:context=".ui.activity.activity_filter.FilterActivity"
+        android:background="@color/app_name_text">
 
         <View
             android:id="@+id/toolbarView"
@@ -51,16 +52,14 @@
             app:layout_constraintTop_toBottomOf="@id/toolbarView"
             app:layout_constraintWidth_percent="0.9">
 
-            <ImageView
-                android:id="@+id/img_container"
+            <com.filter.base.GPUImageView
+                android:id="@+id/imgFilter"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="centerCrop"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -77,6 +76,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/size_80"
                 android:background="@color/app_name_text" />
+
         </FrameLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -119,7 +119,6 @@
                 app:layout_constraintTop_toBottomOf="@id/edt_addText" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

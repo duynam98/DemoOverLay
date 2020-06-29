@@ -2,7 +2,6 @@ package com.duynam.demooverlay.ui.fragment.fragment_filter;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,9 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.duynam.demooverlay.R;
 import com.duynam.demooverlay.databinding.FragmentFilterBinding;
 import com.duynam.demooverlay.ui.activity.activity_edit_image.EditImageActivity;
-import com.filter.base.GPUImage;
+import com.duynam.demooverlay.ui.activity.activity_filter.FilterAdapter;
 import com.filter.base.GPUImageFilter;
-import com.filter.base.Rotation;
 
 public class FilterFragment extends Fragment implements FilterAdapter.OnClickFilter {
 
@@ -51,11 +49,36 @@ public class FilterFragment extends Fragment implements FilterAdapter.OnClickFil
 
 
     @Override
-    public void onClickFilter(GPUImageFilter gpuImageFilter) {
+    public void onClickFilter(final GPUImageFilter gpuImageFilter) {
+        Bitmap bitmap = null;
         if (getActivity() != null && getActivity() instanceof EditImageActivity) {
-            EditImageActivity activity = ((EditImageActivity) getActivity());
-            activity.imageBinding.imgFilter.setFilter(gpuImageFilter);
-            //activity.imageBinding.imgFilter.getGPUImage().setRotation(Rotation.ROTATION_30);
+            final EditImageActivity activity = ((EditImageActivity) getActivity());
+            if (activity.mCurrentTView != null) {
+                activity.mCurrentTView.setInEdit(false);
+            }
+            if (activity.mCurrentEditTextView != null) {
+                activity.mCurrentTView.setInEdit(false);
+            }
+            activity.imageBinding.rootView.setDrawingCacheEnabled(false);
+            activity.imageBinding.rootView.buildDrawingCache();
+            bitmap = activity.imageBinding.rootView.getDrawingCache();
+            //activity.imageBinding.imgFilter.setImage(bitmap);
+            //activity.imageBinding.imgFilter.setFilter(gpuImageFilter);
+
+            //activity.imageBinding.imgFilter.setImage(bitmap);
+            //activity.imageBinding.imgFilter.setFilter(gpuImageFilter);
+
+            activity.imageBinding.imgContainer.setVisibility(View.GONE);
+            if (activity.mCurrentTView != null) {
+                activity.mViews.remove(activity.mCurrentTView);
+                activity.imageBinding.rootView.removeView(activity.mCurrentTView);
+            }
+            if (activity.mCurrentEditTextView != null) {
+                activity.mViews.remove(activity.mCurrentEditTextView);
+                activity.mViews.remove(activity.mCurrentEditTextView);
+            }
         }
     }
+
+
 }
