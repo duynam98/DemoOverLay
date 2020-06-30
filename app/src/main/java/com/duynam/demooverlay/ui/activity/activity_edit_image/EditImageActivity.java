@@ -1,6 +1,5 @@
 package com.duynam.demooverlay.ui.activity.activity_edit_image;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -14,6 +13,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -33,6 +33,7 @@ import com.duynam.demooverlay.ui.activity.activity_filter.FilterActivity;
 import com.duynam.demooverlay.ui.custorm.BubbleTextView;
 import com.duynam.demooverlay.ui.custorm.StickerView;
 import com.duynam.demooverlay.ui.fragment.fragment_add_text.AddTextMenuFragment;
+import com.duynam.demooverlay.ui.fragment.fragment_filter.FilterFragment;
 import com.duynam.demooverlay.ui.fragment.fragment_menu_sticker.MenuStickerFragment;
 import com.duynam.demooverlay.ui.fragment.fragment_opacity.OpacityFragment;
 import com.duynam.demooverlay.utils.Constant;
@@ -55,8 +56,10 @@ public class EditImageActivity extends AppCompatActivity implements MenuAdapter.
     private LinearLayoutManager linearLayoutManager;
     private MenuAdapter menuAdapter;
 
+    //fragment
     private MenuStickerFragment menuStickerFragment;
     private AddTextMenuFragment addTextMenuFragment;
+    private FilterFragment filterFragment;
 
     public StickerView stickerView;
     public ArrayList<View> mViews;
@@ -72,11 +75,12 @@ public class EditImageActivity extends AppCompatActivity implements MenuAdapter.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         imageBinding = DataBindingUtil.setContentView(this, R.layout.activity_edit_image);
-        init();
         initImage();
+        init();
         initRecycleViewMenu();
         doneAddText();
         menuTop();
+        setImageAfterFilter();
         FilterManager.init(this);
     }
 
@@ -92,10 +96,9 @@ public class EditImageActivity extends AppCompatActivity implements MenuAdapter.
         if (getIntent() != null) {
             String path = getIntent().getStringExtra(Constant.PATCH_IMAGE);
             try {
-                Bitmap scaleBitmap;
                 bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.parse(path));
-                if (bitmap.getHeight() >= getResources().getDisplayMetrics().heightPixels){
-                    bitmap = Bitmap.createScaledBitmap(bitmap, (int) Math.round(bitmap.getWidth()/1.5), (int) Math.round(bitmap.getHeight()/1.5), false );
+                if (bitmap.getHeight() >= getResources().getDisplayMetrics().heightPixels) {
+                    bitmap = Bitmap.createScaledBitmap(bitmap, (int) Math.round(bitmap.getWidth() / 1.5), (int) Math.round(bitmap.getHeight() / 1.5), false);
                 }
                 Glide.with(this).asBitmap().load(bitmap).into(new CustomTarget<Bitmap>() {
                     @Override
@@ -136,6 +139,7 @@ public class EditImageActivity extends AppCompatActivity implements MenuAdapter.
     public void init() {
         addTextMenuFragment = new AddTextMenuFragment();
         menuStickerFragment = new MenuStickerFragment();
+        filterFragment = new FilterFragment(bitmap);
         mViews = new ArrayList<>();
     }
 
@@ -152,6 +156,50 @@ public class EditImageActivity extends AppCompatActivity implements MenuAdapter.
                 fragmentTransaction.replace(R.id.frame_menu, menuStickerFragment).addToBackStack(null);
                 fragmentTransaction.commit();
                 break;
+            case 2:
+                imageBinding.imgDoneFilter.setVisibility(View.VISIBLE);
+                final Bitmap bitmap_image = Bitmap.createBitmap(imageBinding.rootView.getWidth(), imageBinding.rootView.getHeight(), Bitmap.Config.ARGB_8888);
+                Canvas canvas = new Canvas(bitmap_image);
+                imageBinding.rootView.draw(canvas);
+                bitmap = bitmap_image;
+                fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.frame_menu, filterFragment).addToBackStack(null);
+                fragmentTransaction.commit();
+        }
+    }
+
+    private void setImageAfterFilter() {
+        if (imageBinding.imgDoneFilter.getVisibility() == View.VISIBLE) {
+            imageBinding.imgDoneFilter.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    imageBinding.imgDoneFilter.setVisibility(View.GONE);
+                    
+                    new Thread() {
+                        @Override
+                        public void run() {
+                            super.run();
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    final Bitmap bitmap = imageBinding.imgFilter.getGPUImage().getBitmapWithFilterApplied();
+                                    Glide.with(EditImageActivity.this).asBitmap().load(bitmap).into(new CustomTarget<Bitmap>() {
+                                        @Override
+                                        public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                                            imageBinding.imgContainer.setImageBitmap(bitmap);
+                                        }
+
+                                        @Override
+                                        public void onLoadCleared(@Nullable Drawable placeholder) {
+
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    }.start();
+                }
+            });
         }
     }
 
@@ -353,8 +401,40 @@ public class EditImageActivity extends AppCompatActivity implements MenuAdapter.
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        if (imageBinding.ctlIputEdt != null && imageBinding.ctlIputEdt.getVisibility() == View.VISIBLE){
+        if (imageBinding.ctlIputEdt != null && imageBinding.ctlIputEdt.getVisibility() == View.VISIBLE) {
             imageBinding.ctlIputEdt.setVisibility(View.GONE);
         }
+
+        if (imageBinding.imgContainer.getVisibility() == View.GONE) {
+            final Bitmap filter_bitmap = imageBinding.imgFilter.getGPUImage().getBitmapWithFilterApplied();
+            imageBinding.imgContainer.setVisibility(View.VISIBLE);
+            Glide.with(this).asBitmap().load(filter_bitmap).into(new CustomTarget<Bitmap>() {
+                @Override
+                public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                    imageBinding.imgContainer.setImageBitmap(filter_bitmap);
+                }
+
+                @Override
+                public void onLoadCleared(@Nullable Drawable placeholder) {
+
+                }
+            });
+        }
     }
+
+    private void setImage(final Bitmap bitmap, ImageView imageView) {
+        Glide.with(this).asBitmap().load(bitmap).into(new CustomTarget<Bitmap>() {
+            @Override
+            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                imageBinding.imgContainer.setImageBitmap(bitmap);
+                setSizeRllSave(bitmap.getWidth(), bitmap.getHeight());
+            }
+
+            @Override
+            public void onLoadCleared(@Nullable Drawable placeholder) {
+
+            }
+        });
+    }
+
 }

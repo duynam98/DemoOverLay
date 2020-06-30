@@ -51,7 +51,7 @@ public class AddTextMenuFragment extends Fragment {
         if (getActivity() != null && getActivity() instanceof EditImageActivity) {
             EditImageActivity activity = ((EditImageActivity) getActivity());
             if (activity.mViews.size() != 0){
-                for (int i = 0; i <= activity.mViews.size(); i++) {
+                for (int i = 0; i < activity.mViews.size(); i++) {
                     if (activity.mViews.get(i) instanceof BubbleTextView){
                         binding.ctlColor.setEnabled(true);
                         binding.ctlTransparency.setEnabled(true);

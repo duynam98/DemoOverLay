@@ -17,6 +17,15 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/toolbarView">
 
+            <com.filter.base.GPUImageView
+                android:id="@+id/imgFilter"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <ImageView
                 android:id="@+id/img_container"
                 android:layout_width="match_parent"
@@ -54,6 +63,19 @@
             android:layout_height="@dimen/size_32"
             android:layout_marginRight="@dimen/size_16"
             android:src="@drawable/ic_done"
+            app:layout_constraintBottom_toBottomOf="@+id/toolbarView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/toolbarView" />
+
+        <ImageView
+            android:id="@+id/img_done_filter"
+            android:layout_width="@dimen/size_32"
+            android:layout_height="@dimen/size_32"
+            android:layout_marginRight="@dimen/size_16"
+            android:src="@drawable/ic_done"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/toolbarView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1"
