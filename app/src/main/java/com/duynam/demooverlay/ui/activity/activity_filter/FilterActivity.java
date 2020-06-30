@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,6 +23,7 @@ import com.bumptech.glide.request.transition.Transition;
 import com.duynam.demooverlay.R;
 import com.duynam.demooverlay.databinding.ActivityFilterBinding;
 import com.duynam.demooverlay.ui.activity.activity_home.MainActivity;
+import com.filter.base.GPUImage;
 import com.filter.base.GPUImageFilter;
 import com.filter.helper.FilterManager;
 
@@ -42,6 +44,7 @@ public class FilterActivity extends AppCompatActivity implements FilterAdapter.O
         initRecycleView();
         initImage();
         menuTop();
+        binding.imgFilter.getGPUImage().setScaleType(GPUImage.ScaleType.CENTER);
     }
 
     private void initRecycleView() {
@@ -61,6 +64,7 @@ public class FilterActivity extends AppCompatActivity implements FilterAdapter.O
                 @Override
                 public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
                     binding.imgFilter.setImage(bitmap);
+                    setSizeRllSave(bitmap.getWidth(), bitmap.getHeight());
                 }
 
                 @Override
@@ -70,6 +74,15 @@ public class FilterActivity extends AppCompatActivity implements FilterAdapter.O
             });
             filterAdapter.setBitmap(bitmap);
         }
+    }
+
+    public void setSizeRllSave(int w, int h) {
+        ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(w, h);
+        params.topToBottom = R.id.toolbarView;
+        params.bottomToTop = R.id.frame_menu;
+        params.leftToLeft = R.id.parent;
+        params.rightToRight = R.id.parent;
+        binding.rootView.setLayoutParams(params);
     }
 
     @Override

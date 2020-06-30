@@ -1,5 +1,6 @@
 package com.duynam.demooverlay.ui.activity.activity_edit_image;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -62,6 +63,7 @@ public class EditImageActivity extends AppCompatActivity implements MenuAdapter.
     public StickerView mCurrentTView;
     public BubbleTextView mCurrentEditTextView;
     public BubbleTextView bubbleTextView;
+    private Dialog dialogAddText;
 
     public Bitmap bitmap;
     private String timesave;
@@ -73,7 +75,6 @@ public class EditImageActivity extends AppCompatActivity implements MenuAdapter.
         imageBinding = DataBindingUtil.setContentView(this, R.layout.activity_edit_image);
         init();
         initImage();
-        rotateImage();
         initRecycleViewMenu();
         doneAddText();
         menuTop();
@@ -96,7 +97,8 @@ public class EditImageActivity extends AppCompatActivity implements MenuAdapter.
                 Glide.with(this).asBitmap().load(bitmap).into(new CustomTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                        imageBinding.imgContainer.setImageBitmap(resource);
+                        imageBinding.imgContainer.setImageBitmap(bitmap);
+                        setSizeRllSave(bitmap.getWidth(), bitmap.getHeight());
                     }
 
                     @Override
@@ -112,7 +114,7 @@ public class EditImageActivity extends AppCompatActivity implements MenuAdapter.
 
 
     public void setSizeRllSave(int w, int h) {
-        ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(w, 0);
+        ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(w, h);
         params.topToBottom = R.id.toolbarView;
         params.bottomToTop = R.id.frame_menu;
         params.leftToLeft = R.id.parent;
@@ -127,25 +129,6 @@ public class EditImageActivity extends AppCompatActivity implements MenuAdapter.
         w = imageBinding.imgContainer.getWidth();
     }
 
-//    public void setImageCenterAfterCrop(int w, int h) {
-//        matrix = new Matrix();
-//        Drawable d = imageBinding.imgContainer.getDrawable();
-//        RectF imageRectF = new RectF(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
-//        RectF viewRectF = new RectF(0, 0, w, h);
-//        matrix.setRectToRect(imageRectF, viewRectF, Matrix.ScaleToFit.CENTER);
-//        imageBinding.imgContainer.setImageMatrix(matrix);
-//    }
-
-    public void rotateImage() {
-//        imageBinding.imgRotateDegree.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                fragmentTransaction = getSupportFragmentManager().beginTransaction();
-//                fragmentTransaction.replace(R.id.frame_menu, new RotateImageFragment()).addToBackStack(null);
-//                fragmentTransaction.commit();
-//            }
-//        });
-    }
 
     public void init() {
         addTextMenuFragment = new AddTextMenuFragment();
@@ -364,5 +347,11 @@ public class EditImageActivity extends AppCompatActivity implements MenuAdapter.
         }
     }
 
-
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if (imageBinding.ctlIputEdt != null && imageBinding.ctlIputEdt.getVisibility() == View.VISIBLE){
+            imageBinding.ctlIputEdt.setVisibility(View.GONE);
+        }
+    }
 }

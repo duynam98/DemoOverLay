@@ -62,7 +62,7 @@ public class StickerView extends ImageView {
 
     private float MIN_SCALE = 0.5f;
 
-    private float MAX_SCALE = 1.2f;
+    private float MAX_SCALE = 2.0f;
 
     private double halfDiagonalLength;
 
