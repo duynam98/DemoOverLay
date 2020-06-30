@@ -6,8 +6,8 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.activity.activity_filter.FilterActivity"
-        android:background="@color/app_name_text">
+        android:background="@color/app_name_text"
+        tools:context=".ui.activity.activity_filter.FilterActivity">
 
         <View
             android:id="@+id/toolbarView"
@@ -27,6 +27,17 @@
             app:layout_constraintEnd_toEndOf="@id/toolbarView"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="@id/toolbarView"
+            app:layout_constraintTop_toTopOf="@id/toolbarView" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/filter"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_20"
+            app:layout_constraintBottom_toBottomOf="@id/toolbarView"
+            app:layout_constraintEnd_toStartOf="@id/img_done"
+            app:layout_constraintStart_toEndOf="@id/img_cancel"
             app:layout_constraintTop_toTopOf="@id/toolbarView" />
 
         <ImageView
@@ -119,6 +130,16 @@
                 app:layout_constraintTop_toBottomOf="@id/edt_addText" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ProgressBar
+            android:id="@+id/progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

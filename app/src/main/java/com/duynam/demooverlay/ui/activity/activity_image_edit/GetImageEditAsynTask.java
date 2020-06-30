@@ -6,7 +6,7 @@ import android.os.Environment;
 import java.io.File;
 import java.util.ArrayList;
 
-public class GetImageEditAsynTask  extends AsyncTask<Void, Void, ArrayList<String>> {
+public class GetImageEditAsynTask extends AsyncTask<Void, Void, ArrayList<String>> {
 
     private ArrayList<String> f = new ArrayList<>();
     private File[] listFile;

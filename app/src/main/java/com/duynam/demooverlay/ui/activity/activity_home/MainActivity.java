@@ -8,9 +8,9 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -23,10 +23,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import com.duynam.demooverlay.R;
 import com.duynam.demooverlay.databinding.ActivityMainBinding;
 import com.duynam.demooverlay.ui.activity.activity_edit_image.EditImageActivity;
-import com.duynam.demooverlay.ui.activity.activity_filter.FilterActivity;
 import com.duynam.demooverlay.utils.Constant;
-import com.theartofdev.edmodo.cropper.CropImage;
-import com.theartofdev.edmodo.cropper.CropImageView;
 import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
@@ -116,8 +113,8 @@ public class MainActivity extends AppCompatActivity implements GetImageFromDevic
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == Constant.PICK_IMAGE){
-            if (data != null){
+        if (requestCode == Constant.PICK_IMAGE) {
+            if (data != null) {
                 Uri patch = data.getData();
                 UCrop.of(Uri.fromFile(new File(getRealPathFromURI_API19(this, patch))), Uri.fromFile(new File(getRealPathFromURI_API19(this, patch)))).start(MainActivity.this);
             }
@@ -131,14 +128,14 @@ public class MainActivity extends AppCompatActivity implements GetImageFromDevic
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    public static String getRealPathFromURI_API19(Context context, Uri uri){
+    public static String getRealPathFromURI_API19(Context context, Uri uri) {
         String filePath = "";
         String wholeID = DocumentsContract.getDocumentId(uri);
         String id = wholeID.split(":")[1];
-        String[] column = { MediaStore.Images.Media.DATA };
+        String[] column = {MediaStore.Images.Media.DATA};
         String sel = MediaStore.Images.Media._ID + "=?";
         Cursor cursor = context.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                column, sel, new String[]{ id }, null);
+                column, sel, new String[]{id}, null);
 
         int columnIndex = cursor.getColumnIndex(column[0]);
         if (cursor.moveToFirst()) {
@@ -154,7 +151,20 @@ public class MainActivity extends AppCompatActivity implements GetImageFromDevic
         if ((ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
                 && ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
             deviceAsynTask = new GetImageFromDeviceAsynTask(this, this);
-            deviceAsynTask.execute();
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    deviceAsynTask.execute();
+                }
+            }, 2000);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (deviceAsynTask != null && deviceAsynTask.isCancelled()) {
+            deviceAsynTask.cancel(true);
         }
     }
 }

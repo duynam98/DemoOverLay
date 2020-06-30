@@ -22,6 +22,7 @@
     <string name="save_image">Save Image</string>
     <string name="yes">Yes</string>
     <string name="cancel">Cancel</string>
+    <string name="filter">Filter</string>
 
     <!--    list color-->
     <string-array name="color">

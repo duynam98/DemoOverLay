@@ -10,7 +10,6 @@ import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -25,23 +24,19 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.duynam.demooverlay.R;
 import com.duynam.demooverlay.databinding.ActivityEditImageBinding;
 import com.duynam.demooverlay.ui.activity.activity_filter.FilterActivity;
-import com.duynam.demooverlay.ui.activity.activity_image_edit.ListImageEditActivity;
 import com.duynam.demooverlay.ui.custorm.BubbleTextView;
 import com.duynam.demooverlay.ui.custorm.StickerView;
 import com.duynam.demooverlay.ui.fragment.fragment_add_text.AddTextMenuFragment;
-import com.duynam.demooverlay.ui.fragment.fragment_filter.FilterFragment;
 import com.duynam.demooverlay.ui.fragment.fragment_menu_sticker.MenuStickerFragment;
 import com.duynam.demooverlay.ui.fragment.fragment_opacity.OpacityFragment;
 import com.duynam.demooverlay.utils.Constant;
 import com.filter.helper.FilterManager;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -49,7 +44,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.UUID;
 
 public class EditImageActivity extends AppCompatActivity implements MenuAdapter.OnClick {
 
@@ -170,11 +164,6 @@ public class EditImageActivity extends AppCompatActivity implements MenuAdapter.
             case 1:
                 fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.frame_menu, menuStickerFragment).addToBackStack(null);
-                fragmentTransaction.commit();
-                break;
-            case 2:
-                fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.frame_menu, new FilterFragment(bitmap)).addToBackStack(null);
                 fragmentTransaction.commit();
                 break;
         }
@@ -326,6 +315,7 @@ public class EditImageActivity extends AppCompatActivity implements MenuAdapter.
                 Intent intent = new Intent(EditImageActivity.this, FilterActivity.class);
                 intent.putExtra("time", timesave);
                 startActivity(intent);
+                finish();
             }
         });
         imageBinding.imgCancel.setOnClickListener(new View.OnClickListener() {

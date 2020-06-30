@@ -121,7 +121,12 @@ public class OpacityFragment extends Fragment {
                     }
                 }
                 if (isCheckTextSize){
-
+                    if (getActivity() != null && getActivity() instanceof EditImageActivity ){
+                        if (((EditImageActivity) getActivity()).mCurrentEditTextView != null){
+                            ((EditImageActivity) getActivity()).mCurrentEditTextView.setSize(16);
+                            binding.sbTransparency.setProgress(0);
+                        }
+                    }
                 }
                 getActivity().getSupportFragmentManager().beginTransaction().remove(OpacityFragment.this).commit();
                 getActivity().getSupportFragmentManager().popBackStack();

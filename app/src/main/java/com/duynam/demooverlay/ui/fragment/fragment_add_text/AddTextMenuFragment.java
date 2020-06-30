@@ -12,6 +12,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.duynam.demooverlay.R;
 import com.duynam.demooverlay.databinding.FragmentAddTextMenuBinding;
 import com.duynam.demooverlay.ui.activity.activity_edit_image.EditImageActivity;
+import com.duynam.demooverlay.ui.custorm.BubbleTextView;
 import com.duynam.demooverlay.ui.fragment.fragment_color.ColorFragment;
 import com.duynam.demooverlay.ui.fragment.fragment_opacity.OpacityFragment;
 
@@ -42,7 +43,24 @@ public class AddTextMenuFragment extends Fragment {
         binding.ctlColor.setEnabled(false);
         binding.ctlTransparency.setEnabled(false);
         binding.ctlSize.setEnabled(false);
+        checkTV();
         return binding.getRoot();
+    }
+
+    private void checkTV(){
+        if (getActivity() != null && getActivity() instanceof EditImageActivity) {
+            EditImageActivity activity = ((EditImageActivity) getActivity());
+            if (activity.mViews.size() != 0){
+                for (int i = 0; i <= activity.mViews.size(); i++) {
+                    if (activity.mViews.get(i) instanceof BubbleTextView){
+                        binding.ctlColor.setEnabled(true);
+                        binding.ctlTransparency.setEnabled(true);
+                        binding.ctlSize.setEnabled(true);
+                        break;
+                    }
+                }
+            }
+        }
     }
 
     private void editTextTransparency() {
