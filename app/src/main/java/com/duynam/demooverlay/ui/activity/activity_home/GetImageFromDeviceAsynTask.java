@@ -43,7 +43,6 @@ public class GetImageFromDeviceAsynTask extends AsyncTask<Void, Void, List<Strin
             int dataColumnIndex = cursor.getColumnIndex(MediaStore.Images.Media.DATA);
             arrPath[i] = cursor.getString(dataColumnIndex);
             list_patchImage.add(arrPath[i]);
-            Log.e("PATH", list_patchImage.get(i));
         }
         cursor.close();
 //        Uri uri;

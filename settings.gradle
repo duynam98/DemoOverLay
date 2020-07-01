@@ -1,3 +1,4 @@
+include ':sticker'
 include ':jsfilter'
 include ':app'
 rootProject.name = "DemoOverLay"
