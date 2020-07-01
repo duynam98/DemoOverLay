@@ -94,7 +94,7 @@ public class FilterActivity extends AppCompatActivity implements FilterAdapter.O
         binding.imgDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                initDialog();
+                //initDialog();
             }
         });
         binding.imgCancel.setOnClickListener(new View.OnClickListener() {
@@ -103,47 +103,6 @@ public class FilterActivity extends AppCompatActivity implements FilterAdapter.O
                 finish();
             }
         });
-    }
-
-    public void saveImage() {
-        binding.progress.setVisibility(View.VISIBLE);
-        Bitmap bitmap = binding.imgFilter.getGPUImage().getBitmapWithFilterApplied();
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, bytes);
-        saveImageAsyntask = new SaveImage(getApplicationContext());
-        SaveImage.OnSaveImage onSaveImage = new SaveImage.OnSaveImage() {
-            @Override
-            public void onSaveImage(boolean isSave) {
-                binding.progress.setVisibility(View.GONE);
-                startActivity(new Intent(FilterActivity.this, MainActivity.class));
-                finish();
-            }
-        };
-        saveImageAsyntask.setOnSaveImage(onSaveImage);
-        saveImageAsyntask.execute(bitmap);
-    }
-
-    private void initDialog() {
-        final Dialog dialog = new Dialog(this);
-        dialog.setContentView(R.layout.dialog_save);
-        ImageView img_yes = dialog.findViewById(R.id.img_yes);
-        ImageView img_cancel = dialog.findViewById(R.id.img_no);
-
-        img_yes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-                saveImage();
-            }
-        });
-
-        img_cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-            }
-        });
-        dialog.show();
     }
 
     @Override

@@ -9,5 +9,8 @@ public class Constant {
     public static final String FOLDER_CACHE_NAME = "cache_image_folder";
     public static final String PATCH_IMAGE_CROP = "image_patch_crop";
     public static final int PICK_IMAGE = 100;
+    public static final String FRAGMENT_ADD_STICKER = "addSticker";
+    public static final String FRAGMENT_ADD_TEXT = "addText";
+    public static final String FRAGMENT_ADD_FILTER = "addFilter";
 
 }

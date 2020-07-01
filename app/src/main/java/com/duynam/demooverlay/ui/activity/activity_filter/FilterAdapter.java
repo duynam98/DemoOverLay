@@ -36,6 +36,13 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.FilterHold
         setData();
     }
 
+    public void clearBitmap(){
+        if (bitmapArrayList!=null){
+            bitmapArrayList.clear();
+            notifyDataSetChanged();
+        }
+    }
+
     public void setOnClickFilter(OnClickFilter onClickFilter) {
         this.onClickFilter = onClickFilter;
     }
@@ -44,20 +51,19 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.FilterHold
         for (int i = 0; i < FilterManager.getInstance().types.length; i++) {
             filterTypeList.add(FilterManager.getInstance().types[i]);
         }
-        notifyDataSetChanged();
     }
 
     public void setBitmap(Bitmap bitmap) {
         int wB = bitmap.getWidth();
         int hB = bitmap.getHeight();
-        if(wB>hB){
-            hB = 200*hB /wB;
+        if (wB > hB) {
+            hB = 200 * hB / wB;
             wB = 200;
-        }else{
-            wB = 200*wB /hB;
+        } else {
+            wB = 200 * wB / hB;
             hB = 200;
         }
-        this.bitmap = Bitmap.createScaledBitmap(bitmap, wB,hB, false);
+        this.bitmap = Bitmap.createScaledBitmap(bitmap, wB, hB, false);
         Log.e("Namtd", "setBitmap: ");
     }
 

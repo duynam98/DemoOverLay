@@ -15,7 +15,19 @@
             app:layout_constraintBottom_toTopOf="@id/frame_menu"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/toolbarView">
+            app:layout_constraintTop_toBottomOf="@id/toolbarView"
+            app:layout_constraintHeight_percent="0.7"
+            app:layout_constraintWidth_percent="0.85">
+
+            <ImageView
+                android:scaleType="center"
+                android:id="@+id/img_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <com.filter.base.GPUImageView
                 android:id="@+id/imgFilter"
@@ -26,61 +38,140 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/toolbarView"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0">
+
             <ImageView
-                android:id="@+id/img_container"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:id="@+id/img_cancel"
+                android:layout_width="@dimen/size_32"
+                android:layout_height="@dimen/size_32"
+                android:layout_marginLeft="@dimen/text_size_16"
+                android:src="@drawable/quantum_ic_clear_white_24"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/img_done"
+                android:layout_width="@dimen/size_32"
+                android:layout_height="@dimen/size_32"
+                android:layout_marginRight="@dimen/size_16"
+                android:src="@drawable/ic_done"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <View
-            android:id="@+id/toolbarView"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/ctl_sticker_bar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="@color/app_name_text">
 
-        <ImageView
-            android:id="@+id/img_cancel"
-            android:layout_width="@dimen/size_32"
-            android:layout_height="@dimen/size_32"
-            android:layout_marginLeft="@dimen/text_size_16"
-            android:src="@drawable/quantum_ic_clear_white_24"
-            app:layout_constraintBottom_toBottomOf="@id/toolbarView"
-            app:layout_constraintEnd_toEndOf="@id/toolbarView"
-            app:layout_constraintHorizontal_bias="0"
-            app:layout_constraintStart_toStartOf="@id/toolbarView"
-            app:layout_constraintTop_toTopOf="@id/toolbarView" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/size_16"
+                android:text="@string/sticker"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_20"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/img_done"
-            android:layout_width="@dimen/size_32"
-            android:layout_height="@dimen/size_32"
-            android:layout_marginRight="@dimen/size_16"
-            android:src="@drawable/ic_done"
-            app:layout_constraintBottom_toBottomOf="@+id/toolbarView"
+            <ImageView
+                android:id="@+id/img_done_sticker"
+                android:layout_width="@dimen/size_32"
+                android:layout_height="@dimen/size_32"
+                android:layout_marginRight="@dimen/size_16"
+                android:src="@drawable/ic_baseline_done_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/ctl_filter_bar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/toolbarView" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="@color/app_name_text">
 
-        <ImageView
-            android:id="@+id/img_done_filter"
-            android:layout_width="@dimen/size_32"
-            android:layout_height="@dimen/size_32"
-            android:layout_marginRight="@dimen/size_16"
-            android:src="@drawable/ic_done"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/toolbarView"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/size_16"
+                android:text="@string/filter"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_20"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/img_done_filter"
+                android:layout_width="@dimen/size_32"
+                android:layout_height="@dimen/size_32"
+                android:layout_marginRight="@dimen/size_16"
+                android:src="@drawable/ic_baseline_done_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/ctl_addText_bar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/toolbarView" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="@color/app_name_text">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/size_16"
+                android:text="@string/addText"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_20"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/img_done_addText"
+                android:layout_width="@dimen/size_32"
+                android:layout_height="@dimen/size_32"
+                android:layout_marginRight="@dimen/size_16"
+                android:src="@drawable/ic_baseline_done_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <FrameLayout
             android:id="@+id/frame_menu"
@@ -88,13 +179,16 @@
             android:layout_height="@dimen/size_80"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvmenuEdit"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/size_80"
                 android:background="@color/app_name_text" />
+
         </FrameLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout

@@ -23,11 +23,19 @@ public class FilterFragment extends Fragment implements FilterAdapter.OnClickFil
 
     private FragmentFilterBinding filterBinding;
     private LinearLayoutManager linearLayoutManager;
-    private FilterAdapter filterAdapter;
+    public FilterAdapter filterAdapter;
     private Bitmap bitmap;
 
     public FilterFragment(Bitmap bitmap) {
         this.bitmap = bitmap;
+    }
+
+    public void setBitMap(Bitmap bitMap){
+        this.bitmap = bitMap;
+    }
+
+    public Bitmap getBitmap(){
+        return bitmap;
     }
 
     @Nullable
@@ -42,7 +50,7 @@ public class FilterFragment extends Fragment implements FilterAdapter.OnClickFil
         linearLayoutManager = new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false);
         filterAdapter = new FilterAdapter(getContext());
         filterAdapter.setOnClickFilter(this);
-        filterAdapter.setBitmap(bitmap);
+        filterAdapter.setBitmap(getBitmap());
         filterBinding.rvFilter.setLayoutManager(linearLayoutManager);
         filterBinding.rvFilter.setAdapter(filterAdapter);
     }

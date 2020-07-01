@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
@@ -94,7 +95,7 @@ public class AddTextMenuFragment extends Fragment {
             public void onClick(View view) {
                 if (getActivity() != null && getActivity() instanceof EditImageActivity) {
                     fragmentTransaction = getFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.container, OpacityFragment.newInstance(false, false, true)).addToBackStack(null);
+                    fragmentTransaction.add(R.id.container, OpacityFragment.newInstance(false, false, true)).addToBackStack(null);
                     fragmentTransaction.commit();
                 }
             }
@@ -112,4 +113,15 @@ public class AddTextMenuFragment extends Fragment {
         });
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        Toast.makeText(getContext(), "ok roi nha", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Toast.makeText(getContext(), "dc roi  ne", Toast.LENGTH_SHORT).show();
+    }
 }

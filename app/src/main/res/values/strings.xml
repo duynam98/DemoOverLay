@@ -23,6 +23,8 @@
     <string name="yes">Yes</string>
     <string name="cancel">Cancel</string>
     <string name="filter">Filter</string>
+    <string name="sticker">Sticker</string>
+    <string name="addText">Add Text</string>
 
     <!--    list color-->
     <string-array name="color">
