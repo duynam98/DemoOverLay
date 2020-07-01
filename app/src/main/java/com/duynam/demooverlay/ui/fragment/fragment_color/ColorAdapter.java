@@ -22,6 +22,7 @@ public class ColorAdapter extends RecyclerView.Adapter<ColorAdapter.ColorHolder>
     private Context context;
     private List<String> listColor;
     private OnClickColor onClickColor;
+    private String[] arr_color;
 
     public void setOnClickColor(OnClickColor onClickColor) {
         this.onClickColor = onClickColor;
@@ -30,13 +31,15 @@ public class ColorAdapter extends RecyclerView.Adapter<ColorAdapter.ColorHolder>
     public ColorAdapter(Context context) {
         this.context = context;
         listColor = new ArrayList<>();
+        setData();
     }
 
-    public void setData(List<String> data) {
-        if (data != null) {
-            listColor.addAll(data);
-            notifyDataSetChanged();
+    public void setData() {
+        arr_color = context.getResources().getStringArray(R.array.color);
+        for (int i = 0; i < arr_color.length; i++) {
+            listColor.add(arr_color[i]);
         }
+        notifyDataSetChanged();
     }
 
     @NonNull

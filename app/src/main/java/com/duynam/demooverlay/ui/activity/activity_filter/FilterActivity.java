@@ -112,4 +112,5 @@ public class FilterActivity extends AppCompatActivity implements FilterAdapter.O
             saveImageAsyntask.cancel(true);
         }
     }
+
 }

@@ -80,6 +80,7 @@ public class OpacityFragment extends Fragment {
                 }
                 if (isCheckTextSize){
                     if (getActivity() != null && getActivity() instanceof EditImageActivity ){
+                        binding.tvTransparency.setText("");
                         if (((EditImageActivity) getActivity()).mCurrentEditTextView != null){
                             ((EditImageActivity) getActivity()).mCurrentEditTextView.setSize(16 + ((float) (seekBar.getProgress()*0.3)));
                             ((EditImageActivity) getActivity()).mCurrentEditTextView.invalidate();

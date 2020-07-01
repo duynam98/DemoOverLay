@@ -14,16 +14,16 @@
             android:layout_height="@dimen/size_0"
             app:layout_constraintBottom_toTopOf="@id/frame_menu"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.7"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/toolbarView"
-            app:layout_constraintHeight_percent="0.7"
             app:layout_constraintWidth_percent="0.85">
 
             <ImageView
-                android:scaleType="center"
                 android:id="@+id/img_container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:scaleType="center"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -80,10 +80,10 @@
             android:id="@+id/ctl_sticker_bar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
+            android:background="@color/app_name_text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:background="@color/app_name_text">
+            app:layout_constraintTop_toTopOf="parent">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -112,10 +112,10 @@
             android:id="@+id/ctl_filter_bar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
+            android:background="@color/app_name_text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:background="@color/app_name_text">
+            app:layout_constraintTop_toTopOf="parent">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -144,10 +144,10 @@
             android:id="@+id/ctl_addText_bar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
+            android:background="@color/app_name_text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:background="@color/app_name_text">
+            app:layout_constraintTop_toTopOf="parent">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -223,7 +223,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/img_doneAddText"
+                android:id="@+id/img_addText"
                 android:layout_width="@dimen/size_32"
                 android:layout_height="@dimen/size_32"
                 android:src="@drawable/ic_done"
@@ -231,6 +231,139 @@
                 app:layout_constraintTop_toBottomOf="@id/edt_addText" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/ctl_seekbar_tv"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_80"
+            android:background="@color/app_name_text"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1">
+
+            <SeekBar
+                android:id="@+id/sb_transparency"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/size_16"
+                android:layout_marginTop="@dimen/size_16"
+                android:layout_marginRight="@dimen/size_16"
+                app:layout_constraintBottom_toTopOf="@id/img_cancle_transparency"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/img_cancle_transparency"
+                android:layout_width="@dimen/size_32"
+                android:layout_height="@dimen/size_32"
+                android:layout_marginLeft="@dimen/size_16"
+                android:layout_marginBottom="@dimen/size_16"
+                android:src="@drawable/quantum_ic_clear_white_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <ImageView
+                android:id="@+id/img_done_transparency"
+                android:layout_width="@dimen/size_32"
+                android:layout_height="@dimen/size_32"
+                android:layout_marginRight="@dimen/size_16"
+                android:layout_marginBottom="@dimen/size_16"
+                android:src="@drawable/ic_done"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/img_cancle_transparency" />
+
+            <TextView
+                android:id="@+id/tv_transparency"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textSize="@dimen/size_16"
+                app:layout_constraintBottom_toBottomOf="@id/img_cancle_transparency"
+                app:layout_constraintEnd_toStartOf="@id/img_done_transparency"
+                app:layout_constraintStart_toEndOf="@id/img_cancle_transparency" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <FrameLayout
+            android:id="@+id/fl_addText"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_80"
+            android:background="@color/app_name_text"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1" />
+
+        <FrameLayout
+            android:id="@+id/fl_color"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_80"
+            android:background="@color/app_name_text"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_color"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/fl_filter"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_80"
+            android:background="@color/app_name_text"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_filter"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/fl_sticker"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_80"
+            android:background="@color/app_name_text"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_sticker"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </FrameLayout>
+
+        <ProgressBar
+            android:id="@+id/progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

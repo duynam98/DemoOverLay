@@ -52,7 +52,7 @@ public class ColorFragment extends Fragment implements ColorAdapter.OnClickColor
         for (int i = 0; i < arr_color.length; i++) {
             listColor.add(arr_color[i]);
         }
-        colorAdapter.setData(listColor);
+        colorAdapter.setData();
     }
 
     private void initAdapter(){
@@ -61,6 +61,8 @@ public class ColorFragment extends Fragment implements ColorAdapter.OnClickColor
     }
 
     private void initRecycleViewColor(){
+        colorAdapter = new ColorAdapter(getContext());
+        colorAdapter.setOnClickColor(this);
         linearLayoutManager = new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false);
         binding.rvListColor.setLayoutManager(linearLayoutManager);
         binding.rvListColor.setAdapter(colorAdapter);

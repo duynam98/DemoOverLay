@@ -68,9 +68,16 @@ public class AddTextMenuFragment extends Fragment {
         binding.ctlTransparency.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                fragmentTransaction = getFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.container, OpacityFragment.newInstance(false, true, false)).addToBackStack(null);
-                fragmentTransaction.commit();
+                //fragmentTransaction = getFragmentManager().beginTransaction();
+                //fragmentTransaction.replace(R.id.container, OpacityFragment.newInstance(false, true, false)).addToBackStack(null);
+                //fragmentTransaction.commit();
+                if (getActivity() != null && getActivity() instanceof EditImageActivity){
+                    EditImageActivity activity = ((EditImageActivity) getActivity());
+                    activity.isCheckOpacityText = true;
+                    activity.isCheckTextSize = false;
+                    activity.imageBinding.ctlSeekbarTv.setVisibility(View.VISIBLE);
+                    activity.imageBinding.flAddText.setVisibility(View.GONE);
+                }
             }
         });
     }
@@ -93,10 +100,18 @@ public class AddTextMenuFragment extends Fragment {
         binding.ctlSize.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (getActivity() != null && getActivity() instanceof EditImageActivity) {
-                    fragmentTransaction = getFragmentManager().beginTransaction();
-                    fragmentTransaction.add(R.id.container, OpacityFragment.newInstance(false, false, true)).addToBackStack(null);
-                    fragmentTransaction.commit();
+//                if (getActivity() != null && getActivity() instanceof EditImageActivity) {
+//                    fragmentTransaction = getFragmentManager().beginTransaction();
+//                    fragmentTransaction.add(R.id.container, OpacityFragment.newInstance(false, false, true)).addToBackStack(null);
+//                    fragmentTransaction.commit();
+//                }
+                if (getActivity() != null && getActivity() instanceof EditImageActivity){
+                    EditImageActivity activity = ((EditImageActivity) getActivity());
+                    activity.isCheckTextSize = true;
+                    activity.isCheckOpacityText = false;
+                    activity.imageBinding.sbTransparency.setProgress(0);
+                    activity.imageBinding.ctlSeekbarTv.setVisibility(View.VISIBLE);
+                    activity.imageBinding.flAddText.setVisibility(View.GONE);
                 }
             }
         });
@@ -106,22 +121,18 @@ public class AddTextMenuFragment extends Fragment {
         binding.ctlColor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                fragmentTransaction = getFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.container, ColorFragment.newInstance()).addToBackStack(null);
-                fragmentTransaction.commit();
+//                fragmentTransaction = getFragmentManager().beginTransaction();
+//                fragmentTransaction.replace(R.id.container, ColorFragment.newInstance()).addToBackStack(null);
+//                fragmentTransaction.commit();
+                if (getActivity() != null && getActivity() instanceof EditImageActivity){
+                    EditImageActivity activity = ((EditImageActivity) getActivity());
+                    activity.isCheckTextSize = false;
+                    activity.isCheckOpacityText = false;
+                    activity.imageBinding.flColor.setVisibility(View.VISIBLE);
+                    activity.imageBinding.flAddText.setVisibility(View.GONE);
+                }
             }
         });
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        Toast.makeText(getContext(), "ok roi nha", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        Toast.makeText(getContext(), "dc roi  ne", Toast.LENGTH_SHORT).show();
-    }
 }
