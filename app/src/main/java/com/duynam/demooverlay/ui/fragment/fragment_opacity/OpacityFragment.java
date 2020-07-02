@@ -22,17 +22,14 @@ import com.duynam.demooverlay.ui.activity.activity_edit_image.EditImageActivity;
 public class OpacityFragment extends Fragment {
 
     private FragmentOpacityBinding binding;
-    private static final String ISCHECKTVIEW = "isCheckTView";
-    private static final String ISCHECKEDITTEXTVIEW = "isCheckRditTextView";
-    private static final String ISCHECKTEXTSIZE = "isCheckTextSize";
     private boolean isCheckTView, isCheckEditText, isCheckTextSize;
 
     public static OpacityFragment newInstance(boolean isCheckTView, boolean isCheckEditTextView, boolean isCheckTextSize) {
         OpacityFragment fragment = new OpacityFragment();
         Bundle bundle = new Bundle();
-        bundle.putBoolean(ISCHECKTVIEW, isCheckTView);
-        bundle.putBoolean(ISCHECKEDITTEXTVIEW, isCheckEditTextView);
-        bundle.putBoolean(ISCHECKTEXTSIZE, isCheckTextSize);
+//        bundle.putBoolean(ISCHECKTVIEW, isCheckTView);
+//        bundle.putBoolean(ISCHECKEDITTEXTVIEW, isCheckEditTextView);
+//        bundle.putBoolean(ISCHECKTEXTSIZE, isCheckTextSize);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -47,9 +44,9 @@ public class OpacityFragment extends Fragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_opacity, container, false);
         Bundle bundle = getArguments();
         if (bundle != null){
-            isCheckTView = bundle.getBoolean(ISCHECKTVIEW);
-            isCheckEditText = bundle.getBoolean(ISCHECKEDITTEXTVIEW);
-            isCheckTextSize = bundle.getBoolean(ISCHECKTEXTSIZE);
+//            isCheckTView = bundle.getBoolean(ISCHECKTVIEW);
+//            isCheckEditText = bundle.getBoolean(ISCHECKEDITTEXTVIEW);
+//            isCheckTextSize = bundle.getBoolean(ISCHECKTEXTSIZE);
         }
         setTransparncyStickerView();
         cancelTransparency();

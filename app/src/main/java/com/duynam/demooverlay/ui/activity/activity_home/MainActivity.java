@@ -43,7 +43,6 @@ public class MainActivity extends AppCompatActivity implements GetImageFromDevic
         mainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         initRecycleView();
         initAsyncTask();
-        initPermission();
         openStorage();
     }
 
@@ -62,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements GetImageFromDevic
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if ((ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
                     && ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                deviceAsynTask = new GetImageFromDeviceAsynTask(this, this);
                 deviceAsynTask.execute();
             } else if (!shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                 requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -99,7 +99,8 @@ public class MainActivity extends AppCompatActivity implements GetImageFromDevic
     public void onClickImage(String patch) {
 //        CropImage.activity(Uri.fromFile(new File(patch)))
 //                .start(this);
-        UCrop.of(Uri.fromFile(new File(patch)), Uri.fromFile(new File(patch)))
+        UCrop.of(Uri.fromFile(new File(patch)), Uri.fromFile(new File(getCacheDir(), Constant.IMAGE_CROP_NAME)))
+                .useSourceImageAspectRatio()
                 .start(this);
     }
 
@@ -116,7 +117,9 @@ public class MainActivity extends AppCompatActivity implements GetImageFromDevic
         if (requestCode == Constant.PICK_IMAGE) {
             if (data != null) {
                 Uri patch = data.getData();
-                UCrop.of(Uri.fromFile(new File(getRealPathFromURI_API19(this, patch))), Uri.fromFile(new File(getRealPathFromURI_API19(this, patch)))).start(MainActivity.this);
+                UCrop.of(Uri.fromFile(new File(getRealPathFromURI_API19(this, patch))),
+                        Uri.fromFile(new File(getCacheDir(), Constant.IMAGE_CROP_NAME)))
+                        .useSourceImageAspectRatio().start(MainActivity.this);
             }
         }
         if (resultCode == RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
@@ -148,16 +151,12 @@ public class MainActivity extends AppCompatActivity implements GetImageFromDevic
     @Override
     protected void onResume() {
         super.onResume();
-        if ((ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
-                && ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    deviceAsynTask = new GetImageFromDeviceAsynTask(MainActivity.this, MainActivity.this);
-                    deviceAsynTask.execute();
-                }
-            }, 2000);
-        }
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                initPermission();
+            }
+        }, 1500);
     }
 
     @Override

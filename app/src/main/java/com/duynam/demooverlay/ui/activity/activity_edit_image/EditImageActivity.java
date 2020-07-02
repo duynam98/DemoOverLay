@@ -11,9 +11,6 @@ import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
@@ -29,6 +26,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.duynam.demooverlay.R;
@@ -115,7 +113,7 @@ public class EditImageActivity extends AppCompatActivity implements MenuAdapter.
         if (getIntent() != null) {
             String path = getIntent().getStringExtra(Constant.PATCH_IMAGE);
             //bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.parse(path));
-            Glide.with(this).asBitmap().load(Uri.parse(path)).into(new CustomTarget<Bitmap>() {
+            Glide.with(this).asBitmap().load(Uri.parse(path)).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(new CustomTarget<Bitmap>() {
                 @Override
                 public void onResourceReady(@NonNull final Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
                     imageBinding.imgContainer.setImageBitmap(resource);
@@ -140,55 +138,70 @@ public class EditImageActivity extends AppCompatActivity implements MenuAdapter.
         }
     }
 
-    private void reSizeBitmap(Bitmap bitmap){
-        int wb = 0, hb=0;
-        if (bitmap.getWidth() > 2000 || bitmap.getHeight() > 2000){
-            if (bitmap.getWidth() > bitmap.getHeight()){
-                wb = 2000;
-                hb = wb * bitmap.getHeight() / bitmap.getWidth();
-                setNewWithHeight(wb, hb);
-            }else {
-                hb = 2000;
-                wb = hb * bitmap.getWidth() / bitmap.getHeight();
-                setNewWithHeight(wb, hb);
-            }
-        }else if (bitmap.getWidth() < 1000 || bitmap.getWidth() < 1000){
-            if (bitmap.getWidth() > bitmap.getHeight()){
-                wb = 2000;
-                hb = wb * bitmap.getHeight() / bitmap.getWidth();
-                setNewWithHeight(wb, hb);
-            }else {
-                hb = 2000;
-                wb = hb * bitmap.getWidth() / bitmap.getHeight();
-                setNewWithHeight(wb, hb);
-            }
+    private void reSizeBitmap(Bitmap bitmap) {
+        int wb = bitmap.getWidth();
+        int hb = bitmap.getHeight();
+//        if (wb > 2000 || hb > 2000) {
+//            if (bitmap.getWidth() > bitmap.getHeight()) {
+//                wb = imageBinding.rootView.getWidth();
+//                hb = 2000;
+//                setNewWithHeight(wb, hb);
+//            } else {
+//                hb = 2000;
+//                wb = hb * bitmap.getWidth() / bitmap.getHeight();
+//                setNewWithHeight(wb, hb);
+//            }
+//        } else if (wb < 1000 || hb < 1000) {
+//            if (bitmap.getWidth() > bitmap.getHeight()) {
+//                wb = 2000;
+//                hb = wb * bitmap.getHeight() / bitmap.getWidth();
+//                setNewWithHeight(wb, hb);
+//            } else {
+//                hb = 2000;
+//                wb = hb * bitmap.getWidth() / bitmap.getHeight();
+//                setNewWithHeight(wb, hb);
+//            }
+//        } else {
+//            setSizeRllSave(bitmap.getWidth(), bitmap.getHeight());
+//        }
+
+        if (wb > hb) {
+            wb = imageBinding.rootView.getWidth();
+            hb = imageBinding.rootView.getWidth() * bitmap.getHeight() / bitmap.getWidth();
+            setNewWithHeight(wb, hb);
+        } else if (hb > wb){
+            hb = imageBinding.rootView.getHeight();
+            wb = imageBinding.rootView.getHeight() * bitmap.getWidth() / bitmap.getHeight();
+            setNewWithHeight(wb, hb);
         }else {
-            setSizeRllSave(bitmap.getWidth(), bitmap.getHeight());
+            wb = imageBinding.rootView.getWidth();
+            hb = imageBinding.rootView.getWidth() * bitmap.getHeight() / bitmap.getWidth();
+            setNewWithHeight(wb, hb);
         }
 
     }
 
-    private void setNewWithHeight(int wb, int hb){
+    private void setNewWithHeight(int wb, int hb) {
         int new_wC, new_hC;
         int max_cW = imageBinding.rootView.getWidth();
         int max_cH = imageBinding.rootView.getHeight();
-        float a = max_cW*hb - max_cH*wb;
-        if (a > 0){
-            new_hC = wb;
-            new_wC = (wb*max_cH)/hb;
-        }else {
+        float a = max_cW * hb - max_cH * wb;
+        if (a > 0) {
             new_wC = wb;
-            new_hC = (max_cW*hb)/wb;
+            new_hC = (max_cW * hb) / wb;
+        } else {
+            new_wC = max_cW;
+            new_hC = (max_cW * hb) / wb;
         }
         setSizeRllSave(new_wC, new_hC);
     }
 
     public void setSizeRllSave(int w, int h) {
         ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(w, h);
-        params.topToBottom = R.id.toolbarView;
-        params.bottomToTop = R.id.frame_menu;
-        params.endToEnd = R.id.toolbarView;
-        params.startToStart = R.id.toolbarView;
+        params.topToTop = R.id.parent_ctl;
+        params.bottomToBottom = R.id.parent_ctl;
+        params.startToStart = R.id.parent_ctl;
+        params.endToEnd = R.id.parent_ctl;
         imageBinding.rootView.setLayoutParams(params);
     }
 

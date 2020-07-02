@@ -12,5 +12,6 @@ public class Constant {
     public static final String FRAGMENT_ADD_STICKER = "addSticker";
     public static final String FRAGMENT_ADD_TEXT = "addText";
     public static final String FRAGMENT_ADD_FILTER = "addFilter";
+    public static final String IMAGE_CROP_NAME = "SampleCropImage.jpg";
 
 }
