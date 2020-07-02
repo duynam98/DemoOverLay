@@ -4,7 +4,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/size_80"
+        android:layout_height="wrap_content"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         tools:context=".view.fragment.fragment_add_text.AddTextMenuFragment"
         android:background="@color/app_name_text"
@@ -23,11 +23,12 @@
                 android:id="@+id/img_add"
                 android:layout_width="@dimen/size_32"
                 android:layout_height="@dimen/size_32"
-                android:src="@drawable/ic_add"
+                android:src="@drawable/ic_add_text"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/tv_add"/>
+                app:layout_constraintBottom_toTopOf="@id/tv_add"
+                android:padding="@dimen/size_4"/>
 
             <TextView
                 android:id="@+id/tv_add"
@@ -59,7 +60,8 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/tv_text_color"/>
+                app:layout_constraintBottom_toTopOf="@id/tv_text_color"
+                android:padding="@dimen/size_4"/>
 
             <TextView
                 android:id="@+id/tv_text_color"
@@ -87,11 +89,12 @@
                 android:id="@+id/img_transparency"
                 android:layout_width="@dimen/size_32"
                 android:layout_height="@dimen/size_32"
-                android:src="@drawable/ic_transparency"
+                android:src="@drawable/ic_text_transparency"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/tv_text_transparency"/>
+                app:layout_constraintBottom_toTopOf="@id/tv_text_transparency"
+                android:padding="@dimen/size_4"/>
 
             <TextView
                 android:id="@+id/tv_text_transparency"
@@ -123,7 +126,8 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/tv_text_size"/>
+                app:layout_constraintBottom_toTopOf="@id/tv_text_size"
+                android:padding="@dimen/size_4"/>
 
             <TextView
                 android:id="@+id/tv_text_size"

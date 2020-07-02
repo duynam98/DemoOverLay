@@ -6,54 +6,74 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.activity.activity_edit_image.EditImageActivity"
-        android:background="@color/colorBlack">
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/parent_ctl"
-        android:layout_width="@dimen/size_0"
-        android:layout_height="@dimen/size_0"
         android:background="@color/colorBlack"
-        app:layout_constraintBottom_toTopOf="@id/frame_menu"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbarView"
-        android:layout_marginTop="@dimen/size_16"
-        android:layout_marginBottom="@dimen/size_16">
+        tools:context=".ui.activity.activity_edit_image.EditImageActivity">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/rootView"
+            android:id="@+id/parent_ctl"
             android:layout_width="@dimen/size_0"
             android:layout_height="@dimen/size_0"
+            android:layout_marginTop="@dimen/size_16"
+            android:layout_marginBottom="@dimen/size_16"
             android:background="@color/colorBlack"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/frame_menu"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
+            app:layout_constraintTop_toBottomOf="@id/view_top">
 
-            <ImageView
-                android:id="@+id/img_container"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/rootView"
+                android:layout_width="@dimen/size_0"
+                android:layout_height="@dimen/size_0"
+                android:background="@color/colorBlack"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent">
 
-            <com.filter.base.GPUImageView
-                android:id="@+id/imgFilter"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                <ImageView
+                    android:id="@+id/img_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:visibility="gone"/>
+
+                <com.filter.base.GPUImageView
+                    android:id="@+id/imgFilter"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.xiaopo.flying.sticker.StickerView
+                    android:id="@+id/img_sticker"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-
+        <View
+            android:id="@+id/view_top"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:alpha="0"
+            android:background="@color/app_name_text"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/toolbarView"

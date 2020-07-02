@@ -87,7 +87,7 @@ public class AddTextMenuFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if (getActivity() != null && getActivity() instanceof EditImageActivity) {
-                    ((EditImageActivity) getActivity()).addTextImage();
+                    ((EditImageActivity) getActivity()).addText();
                     binding.ctlColor.setEnabled(true);
                     binding.ctlTransparency.setEnabled(true);
                     binding.ctlSize.setEnabled(true);

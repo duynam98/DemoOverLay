@@ -44,13 +44,17 @@ import com.duynam.demooverlay.ui.fragment.fragment_menu_sticker.MenuStickerFragm
 import com.duynam.demooverlay.utils.Constant;
 import com.filter.base.GPUImageFilter;
 import com.filter.helper.FilterManager;
+import com.xiaopo.flying.sticker.DialogDrawable;
+import com.xiaopo.flying.sticker.DrawableSticker;
+import com.xiaopo.flying.sticker.Sticker;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-public class EditImageActivity extends AppCompatActivity implements MenuAdapter.OnClick, ColorAdapter.OnClickColor, FilterAdapter.OnClickFilter, MenuStickerAdapter.OnClickSticker {
+public class EditImageActivity extends AppCompatActivity implements MenuAdapter.OnClick, ColorAdapter.OnClickColor, FilterAdapter.OnClickFilter,
+        MenuStickerAdapter.OnClickSticker, com.xiaopo.flying.sticker.StickerView.OnStickerClickListener {
 
     public ActivityEditImageBinding imageBinding;
     public Matrix matrix = new Matrix();
@@ -75,6 +79,9 @@ public class EditImageActivity extends AppCompatActivity implements MenuAdapter.
     public StickerView mCurrentTView;
     public BubbleTextView mCurrentEditTextView;
     public BubbleTextView bubbleTextView;
+
+    private Sticker mCurrentSticker;
+    public long lastTimeClick = 0;
 
     public Bitmap bitmap;
 
@@ -110,22 +117,15 @@ public class EditImageActivity extends AppCompatActivity implements MenuAdapter.
     }
 
     private void initImage() {
+        imageBinding.imgSticker.setOnStickerClickListener(this);
         if (getIntent() != null) {
             String path = getIntent().getStringExtra(Constant.PATCH_IMAGE);
-            //bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.parse(path));
             Glide.with(this).asBitmap().load(Uri.parse(path)).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(new CustomTarget<Bitmap>() {
                 @Override
                 public void onResourceReady(@NonNull final Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
                     imageBinding.imgContainer.setImageBitmap(resource);
+                    imageBinding.imgSticker.setImageBitmap(resource);
                     reSizeBitmap(resource);
-//                    imageBinding.imgContainer.post(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            Log.e("Namtd", "run: " + imageBinding.imgContainer.getHeight() );
-//
-//                            //setSizeRllSave(imageBinding.imgContainer.getWidth(), imageBinding.imgContainer.getHeight());
-//                        }
-//                    });
                 }
 
                 @Override
@@ -141,44 +141,19 @@ public class EditImageActivity extends AppCompatActivity implements MenuAdapter.
     private void reSizeBitmap(Bitmap bitmap) {
         int wb = bitmap.getWidth();
         int hb = bitmap.getHeight();
-//        if (wb > 2000 || hb > 2000) {
-//            if (bitmap.getWidth() > bitmap.getHeight()) {
-//                wb = imageBinding.rootView.getWidth();
-//                hb = 2000;
-//                setNewWithHeight(wb, hb);
-//            } else {
-//                hb = 2000;
-//                wb = hb * bitmap.getWidth() / bitmap.getHeight();
-//                setNewWithHeight(wb, hb);
-//            }
-//        } else if (wb < 1000 || hb < 1000) {
-//            if (bitmap.getWidth() > bitmap.getHeight()) {
-//                wb = 2000;
-//                hb = wb * bitmap.getHeight() / bitmap.getWidth();
-//                setNewWithHeight(wb, hb);
-//            } else {
-//                hb = 2000;
-//                wb = hb * bitmap.getWidth() / bitmap.getHeight();
-//                setNewWithHeight(wb, hb);
-//            }
-//        } else {
-//            setSizeRllSave(bitmap.getWidth(), bitmap.getHeight());
-//        }
-
         if (wb > hb) {
             wb = imageBinding.rootView.getWidth();
             hb = imageBinding.rootView.getWidth() * bitmap.getHeight() / bitmap.getWidth();
             setNewWithHeight(wb, hb);
-        } else if (hb > wb){
+        } else if (hb > wb) {
             hb = imageBinding.rootView.getHeight();
             wb = imageBinding.rootView.getHeight() * bitmap.getWidth() / bitmap.getHeight();
             setNewWithHeight(wb, hb);
-        }else {
+        } else {
             wb = imageBinding.rootView.getWidth();
             hb = imageBinding.rootView.getWidth() * bitmap.getHeight() / bitmap.getWidth();
             setNewWithHeight(wb, hb);
         }
-
     }
 
     private void setNewWithHeight(int wb, int hb) {
@@ -241,6 +216,7 @@ public class EditImageActivity extends AppCompatActivity implements MenuAdapter.
         switch (position) {
             case 0:
                 imageBinding.ctlAddTextBar.setVisibility(View.VISIBLE);
+                imageBinding.toolbarView.setVisibility(View.GONE);
                 fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.fl_addText, addTextMenuFragment).addToBackStack(null);
                 fragmentTransaction.commit();
@@ -248,11 +224,13 @@ public class EditImageActivity extends AppCompatActivity implements MenuAdapter.
                 break;
             case 1:
                 imageBinding.ctlStickerBar.setVisibility(View.VISIBLE);
+                imageBinding.toolbarView.setVisibility(View.GONE);
                 imageBinding.flSticker.setVisibility(View.VISIBLE);
                 imageBinding.sbTransparency.setProgress(0);
                 break;
             case 2:
                 imageBinding.ctlFilterBar.setVisibility(View.VISIBLE);
+                imageBinding.toolbarView.setVisibility(View.GONE);
                 bitmapToGpuImage(getCurrentBitmap());
                 initRecycleViewFilter();
                 imageBinding.flFilter.setVisibility(View.VISIBLE);
@@ -277,53 +255,53 @@ public class EditImageActivity extends AppCompatActivity implements MenuAdapter.
         });
     }
 
-    public void addStickerImage(String patch) {
-        stickerView = new StickerView(this);
-        Bitmap bitmap = getBitmapFromAsset(patch);
-        stickerView.setBitmap(bitmap);
-        stickerView.setOperationListener(new StickerView.OperationListener() {
-            @Override
-            public void onDeleteClick() {
-                mStickerViewAdd.remove(mCurrentTView);
-                imageBinding.rootView.removeView(mCurrentTView);
-            }
-
-            @Override
-            public void onEdit(StickerView stickerView) {
-                if (mCurrentEditTextView != null) {
-                    mCurrentEditTextView.setInEdit(false);
-                }
-                if (mCurrentTView != null) {
-                    mCurrentTView.setInEdit(false);
-                }
-                mCurrentTView.setInEdit(false);
-                mCurrentTView = stickerView;
-                mCurrentTView.setInEdit(true);
-            }
-
-            @Override
-            public void onTop(StickerView stickerView) {
-                int position = mStickerViewAdd.indexOf(stickerView);
-                if (position == mStickerViewAdd.size() - 1) {
-                    return;
-                }
-                StickerView stickerTemp = (StickerView) mStickerViewAdd.remove(position);
-                mStickerViewAdd.add(mStickerViewAdd.size(), stickerTemp);
-            }
-
-            @Override
-            public void onTransparency() {
-                isCheckStickerView = true;
-                imageBinding.ctlSeekbarTv.setVisibility(View.VISIBLE);
-                imageBinding.flSticker.setVisibility(View.GONE);
-            }
-
-        });
-        ConstraintLayout.LayoutParams lp = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.MATCH_PARENT);
-        imageBinding.rootView.addView(stickerView, lp);
-        mStickerViewAdd.add(stickerView);
-        setCurrentTView(stickerView);
-    }
+//    public void addStickerImage(String patch) {
+//        stickerView = new StickerView(this);
+//        Bitmap bitmap = getBitmapFromAsset(patch);
+//        stickerView.setBitmap(bitmap);
+//        stickerView.setOperationListener(new StickerView.OperationListener() {
+//            @Override
+//            public void onDeleteClick() {
+//                mStickerViewAdd.remove(mCurrentTView);
+//                imageBinding.rootView.removeView(mCurrentTView);
+//            }
+//
+//            @Override
+//            public void onEdit(StickerView stickerView) {
+//                if (mCurrentEditTextView != null) {
+//                    mCurrentEditTextView.setInEdit(false);
+//                }
+//                if (mCurrentTView != null) {
+//                    mCurrentTView.setInEdit(false);
+//                }
+//                mCurrentTView.setInEdit(false);
+//                mCurrentTView = stickerView;
+//                mCurrentTView.setInEdit(true);
+//            }
+//
+//            @Override
+//            public void onTop(StickerView stickerView) {
+//                int position = mStickerViewAdd.indexOf(stickerView);
+//                if (position == mStickerViewAdd.size() - 1) {
+//                    return;
+//                }
+//                StickerView stickerTemp = (StickerView) mStickerViewAdd.remove(position);
+//                mStickerViewAdd.add(mStickerViewAdd.size(), stickerTemp);
+//            }
+//
+//            @Override
+//            public void onTransparency() {
+//                isCheckStickerView = true;
+//                imageBinding.ctlSeekbarTv.setVisibility(View.VISIBLE);
+//                imageBinding.flSticker.setVisibility(View.GONE);
+//            }
+//
+//        });
+//        ConstraintLayout.LayoutParams lp = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.MATCH_PARENT);
+//        imageBinding.rootView.addView(stickerView, lp);
+//        mStickerViewAdd.add(stickerView);
+//        setCurrentTView(stickerView);
+//    }
 
     public void addTextImage() {
         bubbleTextView = new BubbleTextView(this,
@@ -434,8 +412,8 @@ public class EditImageActivity extends AppCompatActivity implements MenuAdapter.
         imageBinding.imgAddText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mCurrentEditTextView != null) {
-                    mCurrentEditTextView.setText(imageBinding.edtAddText.getText().toString());
+                if (mCurrentSticker != null) {
+                    ((DialogDrawable) ((DrawableSticker) mCurrentSticker).getDrawable()).setText(imageBinding.edtAddText.getText().toString());
                     imageBinding.ctlIputEdt.setVisibility(View.GONE);
                     imageBinding.flAddText.setVisibility(View.VISIBLE);
                     addMenuAddText();
@@ -447,12 +425,14 @@ public class EditImageActivity extends AppCompatActivity implements MenuAdapter.
     }
 
     private void clearSticker() {
-        if (mStickerViewAdd != null && mStickerViewAdd.size() > 0) {
-            for (int i = 0; i < mStickerViewAdd.size(); i++) {
-                imageBinding.rootView.removeView(mStickerViewAdd.get(i));
-            }
-        }
-        mStickerViewAdd.clear();
+        imageBinding.imgSticker.clearSticker();
+        imageBinding.imgSticker.setHandling();
+    }
+
+    public void addText() {
+        DialogDrawable dialogDrawable = new DialogDrawable();
+        imageBinding.imgSticker.addSticker(dialogDrawable);
+        mCurrentSticker = new DrawableSticker(dialogDrawable);
     }
 
     private void clearTextView() {
@@ -501,6 +481,7 @@ public class EditImageActivity extends AppCompatActivity implements MenuAdapter.
                 imageBinding.flColor.setVisibility(View.GONE);
                 imageBinding.ctlSeekbarTv.setVisibility(View.GONE);
                 imageBinding.flAddText.setVisibility(View.GONE);
+                imageBinding.toolbarView.setVisibility(View.VISIBLE);
                 getSupportFragmentManager().beginTransaction().remove(addTextMenuFragment);
                 getSupportFragmentManager().popBackStack();
             }
@@ -513,6 +494,7 @@ public class EditImageActivity extends AppCompatActivity implements MenuAdapter.
             public void onClick(View view) {
                 imageBinding.ctlStickerBar.setVisibility(View.GONE);
                 imageBinding.flSticker.setVisibility(View.GONE);
+                imageBinding.toolbarView.setVisibility(View.VISIBLE);
                 if (mCurrentEditTextView != null) {
                     mCurrentEditTextView.setInEdit(false);
                 }
@@ -531,7 +513,6 @@ public class EditImageActivity extends AppCompatActivity implements MenuAdapter.
         imageBinding.imgDoneFilter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                imageBinding.flFilter.setVisibility(View.GONE);
                 final Bitmap bitmap = imageBinding.imgFilter.getGPUImage().getBitmapWithFilterApplied();
                 imageBinding.ctlFilterBar.setVisibility(View.GONE);
                 if (mCurrentEditTextView != null) {
@@ -553,18 +534,20 @@ public class EditImageActivity extends AppCompatActivity implements MenuAdapter.
                         });
                     }
                 }.start();
+                imageBinding.flFilter.setVisibility(View.GONE);
                 imageBinding.imgFilter.setVisibility(View.GONE);
+                imageBinding.toolbarView.setVisibility(View.VISIBLE);
             }
         });
     }
 
     @Override
     public void onBackPressed() {
-
         if (imageBinding.flAddText.getVisibility() == View.VISIBLE) {
             clearTextView();
             imageBinding.ctlAddTextBar.setVisibility(View.GONE);
             imageBinding.flAddText.setVisibility(View.GONE);
+            imageBinding.toolbarView.setVisibility(View.VISIBLE);
             getSupportFragmentManager().beginTransaction().remove(addTextMenuFragment).commit();
             getSupportFragmentManager().popBackStack();
         } else if (imageBinding.ctlIputEdt.getVisibility() == View.VISIBLE) {
@@ -590,10 +573,12 @@ public class EditImageActivity extends AppCompatActivity implements MenuAdapter.
             imageBinding.flFilter.setVisibility(View.GONE);
             imageBinding.imgFilter.setAlpha(0);
             imageBinding.ctlFilterBar.setVisibility(View.GONE);
+            imageBinding.toolbarView.setVisibility(View.VISIBLE);
         } else if (imageBinding.flSticker.getVisibility() == View.VISIBLE) {
             clearSticker();
             imageBinding.flSticker.setVisibility(View.GONE);
             imageBinding.ctlStickerBar.setVisibility(View.GONE);
+            imageBinding.toolbarView.setVisibility(View.VISIBLE);
         } else {
             super.onBackPressed();
         }
@@ -651,12 +636,8 @@ public class EditImageActivity extends AppCompatActivity implements MenuAdapter.
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 if (isCheckStickerView) {
-
                     imageBinding.tvTransparency.setText(i + "%");
-                    if (mCurrentTView != null) {
-                        mCurrentTView.setOpacity((int) (255 - Math.round(seekBar.getProgress() * 2.55)));
-                        mCurrentTView.invalidate();
-                    }
+                    imageBinding.imgSticker.setAlphaLogo((int) (255 - Math.round(seekBar.getProgress() * 2.55)));
                 }
                 if (isCheckOpacityText) {
                     imageBinding.tvTransparency.setText(i + "%");
@@ -709,6 +690,7 @@ public class EditImageActivity extends AppCompatActivity implements MenuAdapter.
                 if (isCheckStickerView) {
                     imageBinding.ctlSeekbarTv.setVisibility(View.GONE);
                     imageBinding.flSticker.setVisibility(View.VISIBLE);
+                    imageBinding.sbTransparency.setProgress(0);
                 } else {
                     imageBinding.ctlSeekbarTv.setVisibility(View.GONE);
                     imageBinding.flAddText.setVisibility(View.VISIBLE);
@@ -744,9 +726,8 @@ public class EditImageActivity extends AppCompatActivity implements MenuAdapter.
 
     @Override
     public void onSetColor(String color) {
-        if (mCurrentEditTextView != null && mCurrentEditTextView instanceof BubbleTextView) {
-            mCurrentEditTextView.setColor(Color.parseColor(color));
-        }
+        ((DialogDrawable) ((DrawableSticker) mCurrentSticker).getDrawable()).setColorText(Color.parseColor(color));
+        imageBinding.imgSticker.invalidate();
     }
 
     @Override
@@ -756,6 +737,30 @@ public class EditImageActivity extends AppCompatActivity implements MenuAdapter.
 
     @Override
     public void chooseStickerFinish(String name) {
-        addStickerImage(Constant.PATCH_STICKER + "/" + name);
+        Bitmap bitmap = getBitmapFromAsset(Constant.PATCH_STICKER + "/" + name);
+        imageBinding.imgSticker.addSticker(bitmap);
+    }
+
+
+    @Override
+    public void onStickerClick(Sticker sticker) {
+        if (sticker != null) {
+            if (((DrawableSticker) sticker).getDrawable() instanceof DialogDrawable) {
+                long clickTime = System.currentTimeMillis();
+                if (clickTime - lastTimeClick < 300) {
+                    imageBinding.ctlIputEdt.setVisibility(View.VISIBLE);
+                }
+                lastTimeClick = clickTime;
+            }
+            mCurrentSticker = sticker;
+        }
+    }
+
+    @Override
+    public void onOpacity() {
+        isCheckStickerView = true;
+        imageBinding.ctlSeekbarTv.setVisibility(View.VISIBLE);
+        imageBinding.flSticker.setVisibility(View.GONE);
+        setTransparency();
     }
 }
