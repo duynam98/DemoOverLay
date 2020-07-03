@@ -127,7 +127,7 @@ public class EditImageActivity extends AppCompatActivity implements MenuAdapter.
             Glide.with(this).asBitmap().load(Uri.parse(path)).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(new CustomTarget<Bitmap>() {
                 @Override
                 public void onResourceReady(@NonNull final Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                    imageBinding.imgContainer.setImageBitmap(resource);
+                    //imageBinding.imgContainer.setImageBitmap(resource);
                     imageBinding.imgSticker.setImageBitmap(resource);
                     reSizeBitmap(resource);
                 }
@@ -198,7 +198,7 @@ public class EditImageActivity extends AppCompatActivity implements MenuAdapter.
 
     public void init() {
         imageBinding.imgFilter.setAlpha(0);
-        imageBinding.imgContainer.setAlpha((float) 1.0);
+        imageBinding.imgSticker.setAlpha((float) 1.0);
         imageBinding.ctlStickerBar.setVisibility(View.GONE);
         imageBinding.flSticker.setVisibility(View.GONE);
         imageBinding.ctlFilterBar.setVisibility(View.GONE);
@@ -480,7 +480,7 @@ public class EditImageActivity extends AppCompatActivity implements MenuAdapter.
                 if (mCurrentTView != null) {
                     mCurrentTView.setInEdit(false);
                 }
-                setImageBitmapGlide(getCurrentBitmap(), imageBinding.imgContainer);
+                setImageBitmapGlide(getCurrentBitmap(), imageBinding.imgSticker);
                 clearTextView();
                 imageBinding.flColor.setVisibility(View.GONE);
                 imageBinding.ctlSeekbarTv.setVisibility(View.GONE);
@@ -506,7 +506,7 @@ public class EditImageActivity extends AppCompatActivity implements MenuAdapter.
                 if (mCurrentTView != null) {
                     mCurrentTView.setInEdit(false);
                 }
-                setImageBitmapGlide(getCurrentBitmap(), imageBinding.imgContainer);
+                setImageBitmapGlide(getCurrentBitmap(), imageBinding.imgSticker);
                 clearSticker();
                 getSupportFragmentManager().beginTransaction().remove(menuStickerFragment).commit();
                 getSupportFragmentManager().popBackStack();
@@ -533,7 +533,7 @@ public class EditImageActivity extends AppCompatActivity implements MenuAdapter.
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                setImageBitmapGlide(bitmap, imageBinding.imgContainer);
+                                setImageBitmapGlide(bitmap, imageBinding.imgSticker);
                                 clearSticker();
                             }
                         });
@@ -768,8 +768,10 @@ public class EditImageActivity extends AppCompatActivity implements MenuAdapter.
 
     @Override
     public void onSetColor(String color) {
-        ((DialogDrawable) ((DrawableSticker) mCurrentSticker).getDrawable()).setColorText(Color.parseColor(color));
-        imageBinding.imgSticker.invalidate();
+        if (((DialogDrawable) ((DrawableSticker) mCurrentSticker).getDrawable()) != null){
+            ((DialogDrawable) ((DrawableSticker) mCurrentSticker).getDrawable()).setColorText(Color.parseColor(color));
+            imageBinding.imgSticker.invalidate();
+        }
     }
 
     @Override
