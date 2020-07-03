@@ -25,6 +25,10 @@
     <string name="filter">Filter</string>
     <string name="sticker">Sticker</string>
     <string name="addText">Add Text</string>
+    <string name="text_stroke">Stroke</string>
+    <string name="text_font">Font</string>
+    <string name="text_shadow">Shadow</string>
+    <string name="double_click">DOUBLE_CLICK</string>
 
     <!--    list color-->
     <string-array name="color">

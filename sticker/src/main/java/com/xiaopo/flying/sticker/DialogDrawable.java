@@ -12,15 +12,13 @@ import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
-import android.text.BoringLayout;
-import android.text.Layout;
 import android.text.TextPaint;
 
 
 public class DialogDrawable extends Drawable {
 
     private Paint mBorderPaint;
-    private Paint mTextPaint;
+    public Paint mTextPaint;
     private RectF mRectF;
     private int mRadius = 20;
     private int mOffsetY = 30;
@@ -31,6 +29,8 @@ public class DialogDrawable extends Drawable {
 
     private String textDraw;
 
+    private float maxTextSize = 40;
+
     public DialogDrawable() {
         mBorderPaint = new Paint();
         mBorderPaint.setAntiAlias(true);
@@ -39,7 +39,7 @@ public class DialogDrawable extends Drawable {
         mTextPaint = new TextPaint();
         mTextPaint.setAntiAlias(true);
         mTextPaint.setColor(Color.BLACK);
-        mTextPaint.setTextSize(40);
+        mTextPaint.setTextSize(16);
 
 //        mRectF = new RectF(0, 0, getIntrinsicWidth() - mOffsetX, getIntrinsicHeight() - mOffsetY);\
         textDraw = "double_click";
@@ -195,6 +195,18 @@ public class DialogDrawable extends Drawable {
         width = bounds.width() + 50;
         height = bounds.height() + 50;
         mRectF = new RectF(0, 25, width, height);
+    }
+
+    public int getAlphaText() {
+        return mTextPaint.getAlpha();
+    }
+
+    public void setTextSize(float size) {
+        if (mTextPaint != null) {
+            if (size < 40) {
+                mTextPaint.setTextSize(size);
+            }
+        }
     }
 
 }

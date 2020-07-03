@@ -44,7 +44,13 @@ public class AddTextMenuFragment extends Fragment {
         binding.ctlColor.setEnabled(false);
         binding.ctlTransparency.setEnabled(false);
         binding.ctlSize.setEnabled(false);
+        binding.ctlStroke.setEnabled(false);
+        binding.ctlFont.setEnabled(false);
+        binding.ctlShadow.setEnabled(false);
         checkTV();
+        setStroke();
+        setShadow();
+        setFont();
         return binding.getRoot();
     }
 
@@ -68,15 +74,13 @@ public class AddTextMenuFragment extends Fragment {
         binding.ctlTransparency.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //fragmentTransaction = getFragmentManager().beginTransaction();
-                //fragmentTransaction.replace(R.id.container, OpacityFragment.newInstance(false, true, false)).addToBackStack(null);
-                //fragmentTransaction.commit();
                 if (getActivity() != null && getActivity() instanceof EditImageActivity){
                     EditImageActivity activity = ((EditImageActivity) getActivity());
                     activity.isCheckOpacityText = true;
                     activity.isCheckTextSize = false;
                     activity.imageBinding.ctlSeekbarTv.setVisibility(View.VISIBLE);
                     activity.imageBinding.flAddText.setVisibility(View.GONE);
+                    activity.setAlphaProgressTextView();
                 }
             }
         });
@@ -91,6 +95,27 @@ public class AddTextMenuFragment extends Fragment {
                     binding.ctlColor.setEnabled(true);
                     binding.ctlTransparency.setEnabled(true);
                     binding.ctlSize.setEnabled(true);
+                    binding.ctlStroke.setEnabled(true);
+                    binding.ctlFont.setEnabled(true);
+                    binding.ctlShadow.setEnabled(true);
+                }
+            }
+        });
+    }
+
+    private void setShadow(){
+        binding.ctlShadow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (getActivity() != null && getActivity() instanceof EditImageActivity){
+                    EditImageActivity activity = ((EditImageActivity) getActivity());
+                    activity.isCheckTextSize = false;
+                    activity.isCheckOpacityText = false;
+                    activity.isCheckStroke = false;
+                    activity.isCheckStickerView = false;
+                    activity.isCheckShadow = true;
+                    activity.imageBinding.ctlSeekbarTv.setVisibility(View.VISIBLE);
+                    activity.imageBinding.flAddText.setVisibility(View.GONE);
                 }
             }
         });
@@ -100,15 +125,13 @@ public class AddTextMenuFragment extends Fragment {
         binding.ctlSize.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                if (getActivity() != null && getActivity() instanceof EditImageActivity) {
-//                    fragmentTransaction = getFragmentManager().beginTransaction();
-//                    fragmentTransaction.add(R.id.container, OpacityFragment.newInstance(false, false, true)).addToBackStack(null);
-//                    fragmentTransaction.commit();
-//                }
                 if (getActivity() != null && getActivity() instanceof EditImageActivity){
                     EditImageActivity activity = ((EditImageActivity) getActivity());
                     activity.isCheckTextSize = true;
                     activity.isCheckOpacityText = false;
+                    activity.isCheckStroke = false;
+                    activity.isCheckStickerView = false;
+                    activity.isCheckShadow = false;
                     activity.imageBinding.sbTransparency.setProgress(0);
                     activity.imageBinding.ctlSeekbarTv.setVisibility(View.VISIBLE);
                     activity.imageBinding.flAddText.setVisibility(View.GONE);
@@ -121,14 +144,45 @@ public class AddTextMenuFragment extends Fragment {
         binding.ctlColor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                fragmentTransaction = getFragmentManager().beginTransaction();
-//                fragmentTransaction.replace(R.id.container, ColorFragment.newInstance()).addToBackStack(null);
-//                fragmentTransaction.commit();
                 if (getActivity() != null && getActivity() instanceof EditImageActivity){
                     EditImageActivity activity = ((EditImageActivity) getActivity());
                     activity.isCheckTextSize = false;
                     activity.isCheckOpacityText = false;
                     activity.imageBinding.flColor.setVisibility(View.VISIBLE);
+                    activity.imageBinding.flAddText.setVisibility(View.GONE);
+                }
+            }
+        });
+    }
+
+    private void setStroke(){
+        binding.ctlStroke.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (getActivity() != null && getActivity() instanceof EditImageActivity){
+                    EditImageActivity activity = ((EditImageActivity) getActivity());
+                    activity.isCheckTextSize = false;
+                    activity.isCheckOpacityText = false;
+                    activity.isCheckStroke = true;
+                    activity.imageBinding.ctlSeekbarTv.setVisibility(View.VISIBLE);
+                    activity.imageBinding.flAddText.setVisibility(View.GONE);
+                }
+            }
+        });
+    }
+
+    private void setFont(){
+        binding.ctlFont.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (getActivity() != null && getActivity() instanceof EditImageActivity){
+                    EditImageActivity activity = ((EditImageActivity) getActivity());
+                    activity.isCheckTextSize = false;
+                    activity.isCheckOpacityText = false;
+                    activity.isCheckStroke = false;
+                    activity.isCheckStickerView = false;
+                    activity.isCheckShadow = false;
+                    activity.imageBinding.ctlFont.setVisibility(View.VISIBLE);
                     activity.imageBinding.flAddText.setVisibility(View.GONE);
                 }
             }

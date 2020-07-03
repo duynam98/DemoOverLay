@@ -80,7 +80,7 @@ public class StickerView extends androidx.appcompat.widget.AppCompatImageView {
 
     private ActionMode mCurrentMode = ActionMode.NONE;
 
-    private List<Sticker> mStickers = new ArrayList<>();
+    public List<Sticker> mStickers = new ArrayList<>();
     private List<ItemSticker> listSticker = new ArrayList<>();
     private Sticker mHandlingSticker;
 
@@ -654,7 +654,7 @@ public class StickerView extends androidx.appcompat.widget.AppCompatImageView {
     }
 
     public void setAlphaLogo(int alpha) {
-        if (((DrawableSticker) mHandlingSticker).getDrawable() != null){
+        if (mHandlingSticker != null){
             if (((DrawableSticker) mHandlingSticker).getDrawable() instanceof DialogDrawable) {
                 Log.d(TAG, "onStickerClick: ");
             } else {
