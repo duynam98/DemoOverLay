@@ -371,8 +371,8 @@
             app:layout_constraintVertical_bias="1">
 
             <com.duynam.demooverlay.ui.custorm.StartPointSeekBar
-                app:minValue="-300"
-                app:maxValue="+300"
+                app:minValue="-100"
+                app:maxValue="+100"
                 android:id="@+id/sb_brightness"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

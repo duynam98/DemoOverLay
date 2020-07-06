@@ -145,10 +145,14 @@ public class DialogDrawable extends Drawable {
         mTextPaint.setColor(intColor);
     }
 
+    public int getColor(){
+        return mTextPaint.getColor();
+    }
+
     public void setStroke(float width, String color) {
         mTextPaint.setStyle(Paint.Style.STROKE);
         mTextPaint.setStrokeWidth(width);
-        mTextPaint.setColor(Color.parseColor("#" + color));
+        //mTextPaint.setColor(Color.parseColor("#" + color));
     }
 
     public void setLetterSpacing(float space) {
