@@ -29,6 +29,10 @@
     <string name="text_font">Font</string>
     <string name="text_shadow">Shadow</string>
     <string name="double_click">DOUBLE_CLICK</string>
+    <string name="menu_edit_adjust">Adjust</string>
+    <string name="brightness">Brightness</string>
+    <string name="contrast">Contrast</string>
+    <string name="blur">Blur</string>
 
     <!--    list color-->
     <string-array name="color">

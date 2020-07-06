@@ -43,6 +43,7 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
         menuHomeList.add(new MenuHome(R.drawable.ic_text, context.getResources().getString(R.string.menu_edit_text)));
         menuHomeList.add(new MenuHome(R.drawable.ic_stickers, context.getResources().getString(R.string.menu_edit_stickers)));
         menuHomeList.add(new MenuHome(R.drawable.ic_filters, context.getResources().getString(R.string.menu_edit_filter)));
+        menuHomeList.add(new MenuHome(R.drawable.ic_adjust, context.getResources().getString(R.string.menu_edit_adjust)));
     }
 
     @NonNull
